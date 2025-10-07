@@ -37,14 +37,14 @@ namespace Komodo.Runtime
         }
 
 
-        public void End_Record()
-        {
-            session_id = NetworkUpdateHandler.Instance.session_id;
+    public void End_Record()
+    {
+        session_id = NetworkUpdateHandler.Instance.session_id;
 #if UNITY_WEBGL && !UNITY_EDITOR || TESTING_BEFORE_BUILDING
         ToggleCapture(1, session_id);
 #else
-            SocketIOEditorSimulator.Instance.ToggleCapture(0, session_id);
+            SocketIOEditorSimulator.Instance.ToggleCapture(1, session_id);
 #endif
-        }
+    }
     }
 }
