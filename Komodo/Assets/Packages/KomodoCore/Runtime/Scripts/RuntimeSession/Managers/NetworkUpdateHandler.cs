@@ -69,7 +69,7 @@ namespace Komodo.Runtime
 #else
         private SocketIOEditorSimulator SocketSim;
 #endif
-
+        
         private SessionDetailsSource sessionDetailsSource;
 
         // session id from JS
@@ -200,13 +200,19 @@ namespace Komodo.Runtime
         private void _GetModelsAndSessionDetails ()
         {
             
-#if DEVELOPMENT_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (useEditorSessionData) 
             {
+                Debug.Log("In Unity Editor or development build. Using SessionData file.");
                 sessionDetailsSource = SessionDetailsSource.SESSION_DATA_FILE;
             }
-            sessionDetailsSource = SessionDetailsSource.SOCKET_IO_SIMULATOR;
+            else
+            {
+                Debug.Log("In Unity Editor or development build. Using SocketIO Simulator.");
+                sessionDetailsSource = SessionDetailsSource.SOCKET_IO_SIMULATOR;
+            }
 #else
+            Debug.Log("In WebGL and/or release build. Using SocketIO JS Lib (live server).");
             sessionDetailsSource = SessionDetailsSource.SOCKET_IO_JSLIB;
 #endif
             

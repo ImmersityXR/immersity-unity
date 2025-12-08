@@ -17,9 +17,9 @@ MonoBehaviour:
   description: 
   start_time: 
   end_time: 
-  app_and_build: test/v9.9.9
+  app_and_build: editor/v9.9.9
   session_id: 99
-  session_name: Hello World
+  session_name: Hello World!
   users: []
   models:
   - name: Dragon whole
