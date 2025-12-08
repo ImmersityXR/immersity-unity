@@ -1,5 +1,6 @@
 using Komodo.Utilities;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Komodo.Runtime
@@ -23,7 +24,7 @@ namespace Komodo.Runtime
 
         public Button drawButton;
 
-        public Text sessionAndBuildText;
+        [FormerlySerializedAs("sessionAndBuildText")] public Text sessionText;
 
         private Canvas mainUICanvas;
 

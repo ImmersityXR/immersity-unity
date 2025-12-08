@@ -181,7 +181,7 @@ namespace Komodo.Runtime
            
             clientTagSetup = menu.GetComponent<ChildTextCreateOnCall>();
 
-            sessionAndBuildName = menu.GetComponent<MainUIReferences>().sessionAndBuildText;
+            sessionAndBuildName = menu.GetComponent<MainUIReferences>().sessionText;
 
             if (menuTransform == null) 
             {
@@ -236,9 +236,9 @@ namespace Komodo.Runtime
 
         private void DisplaySessionDetails ()
         {
-            sessionAndBuildName.text = NetworkUpdateHandler.Instance.sessionName;
+            sessionAndBuildName.text = NetworkUpdateHandler.Instance.SessionName;
 
-            sessionAndBuildName.text += Environment.NewLine +  NetworkUpdateHandler.Instance.buildName;
+            sessionAndBuildName.text += Environment.NewLine +  NetworkUpdateHandler.Instance.AppAndBuildName;
         }
 
         public bool GetCursorActiveState() 

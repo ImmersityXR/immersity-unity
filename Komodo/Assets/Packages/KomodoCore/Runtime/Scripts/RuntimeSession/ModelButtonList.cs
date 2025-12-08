@@ -38,12 +38,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Komodo.AssetImport;
+using UnityEngine.Serialization;
 
 namespace Komodo.Runtime
 {
     public class ModelButtonList : ButtonList
     {
-        public ModelDataTemplate modelData;
+        [FormerlySerializedAs("modelData")] public SessionDataTemplate sessionData;
 
         private EntityManager entityManager;
 
@@ -77,17 +78,17 @@ namespace Komodo.Runtime
                 transformToPlaceButtonUnder = transform;
             }
 
-            if (!modelData)
+            if (!sessionData)
             {
                 throw new UnassignedReferenceException("modelData on ModelButtonList");
             }
 
-            if (modelData.models == null)
+            if (sessionData.models == null)
             {
                 throw new System.Exception("expected modelData to have models, but it was null");
             }
 
-            for (int i = 0; i < modelData.models.Count; i++)
+            for (int i = 0; i < sessionData.models.Count; i++)
             {
                 if (UIManager.IsAlive)
                 {
@@ -95,7 +96,7 @@ namespace Komodo.Runtime
 
                     if (item.TryGetComponent(out ModelItem modelItem))
                     {
-                        string name = modelData.models[i].name;
+                        string name = sessionData.models[i].name;
 
                         if (name == null)
                         {
@@ -104,7 +105,7 @@ namespace Komodo.Runtime
                             name = "null";
                         }
 
-                        modelItem.Initialize(i, modelData.models[i].name);
+                        modelItem.Initialize(i, sessionData.models[i].name);
                     }
                     else
                     {
