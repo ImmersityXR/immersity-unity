@@ -178,8 +178,6 @@ namespace Komodo.Runtime
             }
 
             menuTransform = menuCanvas.GetComponent<RectTransform>();
-           
-            usernamesListController = menu.GetComponent<UsernamesListController>();
 
             sessionAndBuildName = menu.GetComponent<MainUIReferences>().sessionText;
 
