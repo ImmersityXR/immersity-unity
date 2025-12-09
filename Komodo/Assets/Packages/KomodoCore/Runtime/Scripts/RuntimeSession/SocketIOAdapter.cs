@@ -160,6 +160,8 @@ namespace Komodo.Runtime
             result = SocketIOJSLib.OpenSyncConnection();
 #else
             result = socketSim.OpenSyncConnection();
+            Instance.OnConnect("0xdeadbeef");
+            Instance.OnServerName("Editor Simulator");
 #endif
             if (result != SocketIOJSLib.SUCCESS)
             {
@@ -220,6 +222,8 @@ namespace Komodo.Runtime
             result = SocketIOJSLib.JoinSyncSession();
 #else       
             result = socketSim.JoinSyncSession();
+            Instance.OnOwnClientJoined(123);
+            Instance.OnSessionInfo("Connection info will appear here.");
 #endif
             if (result != SocketIOJSLib.SUCCESS)
             {
@@ -249,6 +253,7 @@ namespace Komodo.Runtime
             result = SocketIOJSLib.LeaveSyncSession();
 #else       
             result = socketSim.LeaveSyncSession();
+            Instance.OnOwnClientLeft(123);
 #endif
             if (result != SocketIOJSLib.SUCCESS)
             {
@@ -309,6 +314,7 @@ namespace Komodo.Runtime
             result = SocketIOJSLib.CloseSyncConnection();
 #else       
             result = socketSim.CloseSyncConnection();
+            Instance.OnDisconnect("client closed connection");
 #endif
             if (result != SocketIOJSLib.SUCCESS)
             {
@@ -347,6 +353,8 @@ namespace Komodo.Runtime
 
         public void OnDisconnect (string reason) {
             connectionAdapter.DisplayDisconnect(reason);
+            connectionAdapter.ClearSocketID();
+            connectionAdapter.ClearSessionName();
         }
 
         public void OnError (string error) {
@@ -441,6 +449,8 @@ namespace Komodo.Runtime
             connectionAdapter.SetSessionName(session_id);
 
             connectionAdapter.DisplayOwnClientLeft(session_id);
+            
+            connectionAdapter.ClearSessionName();
 
             ClientSpawnManager.Instance.DisplayOwnClientIsDisconnected();
         }

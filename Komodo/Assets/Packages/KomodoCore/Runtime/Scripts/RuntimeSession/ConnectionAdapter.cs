@@ -320,7 +320,7 @@ namespace Komodo.Runtime
 
         private void DisplayStatus()
         {
-            socketIODisplay.text = $"{connectDisconnectReconnect}\n{sessionStatus}\n{socketID}\n{pingPongClients}\n{error}";
+            socketIODisplay.text = $"Server: {connectDisconnectReconnect}\nSocket: {socketID}\nStatus: {sessionStatus}\nDetails: {pingPongClients}\n{error}";
         }
     }
 }

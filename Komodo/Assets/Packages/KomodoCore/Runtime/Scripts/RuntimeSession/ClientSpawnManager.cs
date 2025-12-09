@@ -581,6 +581,12 @@ namespace Komodo.Runtime
 
         public void DisplayClientIsDisconnected (int clientID)
         {
+            if (clientID == NetworkUpdateHandler.Instance.client_id)
+            {
+                // Don't do anything if our own client is disconnected.
+                return;
+            }
+            
             if (UIManager.IsAlive)
             {
                 UIManager.Instance.clientTagSetup.DeleteTextFromString(usernameFromClientId[clientID]);
