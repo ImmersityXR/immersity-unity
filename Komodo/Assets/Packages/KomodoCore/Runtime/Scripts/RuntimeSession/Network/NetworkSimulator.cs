@@ -19,14 +19,14 @@ namespace Komodo.Runtime
         /** Test client spawning in the editor. **/
         [ContextMenu("Add Incremental Client")]
         public void AddIncrementalClient() {
-            ClientSpawnManager.Instance.AddNewClient(_GetTopIncrementalClientId() + 1);
+            SocketIOAdapter.Instance.OnClientJoined(_GetTopIncrementalClientId() + 1);
             _numIncrementalClients += 1;
         }
 
         /** Test client spawning in the editor. **/
         [ContextMenu("Remove Incremental Client")]
         public void RemoveIncrementalClient() {
-            ClientSpawnManager.Instance.RemoveClient(_GetTopIncrementalClientId());
+            SocketIOAdapter.Instance.OnOtherClientLeft(_GetTopIncrementalClientId());
             _numIncrementalClients -= 1;
         }
 

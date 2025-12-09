@@ -236,9 +236,11 @@ namespace Komodo.Runtime
 
         public void DisplayOtherClientJoined (int client_id)
         {
-            this.pingPongClients = "Someone just joined.";
+            this.pingPongClients = $"Client {client_id} just joined.";
 
             ClearError();
+
+            DisplayStatus();
         }
 
         public void DisplayOwnClientJoined (int session_id)
@@ -274,6 +276,15 @@ namespace Komodo.Runtime
             DisplayStatus();
         }
 
+        public void DisplayOtherClientLeft (int client_id)
+        {
+            this.pingPongClients = $"Client {client_id} just left.";
+
+            ClearError();
+
+            DisplayStatus();
+        }
+
         public void DisplayFailedToLeave (int session_id)
         {
             this.connectDisconnectReconnect = $"{serverName}";
@@ -291,7 +302,7 @@ namespace Komodo.Runtime
 
             this.sessionStatus = $"{sessionName}";
 
-            this.pingPongClients = "Someone just left.";
+            this.pingPongClients = $"Client {client_id} just disconnected.";
 
             ClearError();
 

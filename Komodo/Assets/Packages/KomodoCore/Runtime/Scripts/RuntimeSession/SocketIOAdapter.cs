@@ -442,6 +442,8 @@ namespace Komodo.Runtime
         public void OnOtherClientLeft (int client_id)
         {
             ClientSpawnManager.Instance.RemoveClient(client_id);
+
+            connectionAdapter.DisplayOtherClientLeft(client_id);
         }
 
         public void OnOwnClientLeft (int session_id)

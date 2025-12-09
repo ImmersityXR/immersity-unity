@@ -415,7 +415,7 @@ namespace Komodo.Runtime
         public void AddNewClient(int clientID, bool isMainPlayer = false)
         {
             if (clientID == NetworkUpdateHandler.Instance.client_id && !isMainPlayer)
-            {
+            { 
                 Debug.LogError($"AddNewClient was requested for own client ID ({clientID}) when isMainPlayer was false. Skipping.");
 
                 return;
