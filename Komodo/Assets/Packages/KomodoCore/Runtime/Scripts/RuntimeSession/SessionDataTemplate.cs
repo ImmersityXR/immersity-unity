@@ -58,5 +58,20 @@ namespace Komodo.Runtime
         
         //list our data objects to import
         public List<ModelImportData> models;
+
+        public string GetPlayerNameFromClientID(int clientID)
+        {
+            foreach (User user in users)
+            {
+                if (clientID != user.student_id)
+                {
+                    continue;
+                }
+
+                return user.first_name + "  " + user.last_name;
+            }
+
+            return "User " + clientID;
+        }
     }
 }

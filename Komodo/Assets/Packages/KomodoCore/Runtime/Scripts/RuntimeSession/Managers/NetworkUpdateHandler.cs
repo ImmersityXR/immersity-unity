@@ -414,23 +414,6 @@ namespace Komodo.Runtime
             _Tick();
         }
 
-        public string GetPlayerNameFromClientID(int clientID)
-        {
-            var details = sessionData;
-
-            foreach (User user in details.users)
-            {
-                if (clientID != user.student_id)
-                {
-                    continue;
-                }
-
-                return user.first_name + "  " + user.last_name;
-            }
-
-            return "User " + clientID;
-        }
-
         // Use the inspector to call this method.
         [ContextMenu("TestProcessMessage")]
         public void TestProcessMessage()

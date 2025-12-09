@@ -98,6 +98,7 @@ namespace Komodo.Runtime
         private Dictionary<int, string> usernameFromClientId = new Dictionary<int, string>();
         public Dictionary<int, Animator> animatorFromClientId = new Dictionary<int, Animator>();
 
+        private int ownClientID;
         private string mainClientName = "Unset Name";
         #endregion
 
@@ -118,6 +119,8 @@ namespace Komodo.Runtime
         EntityManager entityManager;
         #endregion
 
+        private SessionDataTemplate sessionData;
+
         public void Awake() 
         {
             //used to set our manager's alive state to true to detect if it exists within scene
@@ -132,6 +135,9 @@ namespace Komodo.Runtime
 #if TESTING_BEFORE_BUILDING
             Debug.LogWarning("Directive TESTING_BEFORE_BUILDING was enabled. Please disable it before production.");
 #endif
+            sessionData = NetworkUpdateHandler.Instance.sessionData;
+            ownClientID = NetworkUpdateHandler.Instance.client_id;
+            
             //WebGLMemoryStats.LogMoreStats("ClientSpawnManager Start BEFORE");
             mainPlayer = GameObject.FindWithTag(TagList.player);
 
@@ -242,43 +248,41 @@ namespace Komodo.Runtime
 
         public void AddNewClients(int[] clientIDs)
         {
-            foreach (var clientID in clientIDs)
+            foreach (var id in clientIDs)
             {
-                if (clientID != NetworkUpdateHandler.Instance.client_id)
+                if (id != ownClientID)
                 {
-                    AddNewClient(clientID);
+                    AddNewClient(id);
                 }
             }
         }
 
         public void AddOwnClient()
         {
-            int clientID = NetworkUpdateHandler.Instance.client_id;
-
             if (GameStateManager.IsAlive && !GameStateManager.Instance.isAvatarLoadingFinished)
             {
                 return;
             }
 
             //setup newclient
-            if (clientIDs.Contains(clientID))
+            if (clientIDs.Contains(ownClientID))
             {
                 return;
             }
 
-            clientIDs.Add(clientID);
+            clientIDs.Add(ownClientID);
 
-            mainClientName = NetworkUpdateHandler.Instance.GetPlayerNameFromClientID(clientID);
+            mainClientName = sessionData.GetPlayerNameFromClientID(ownClientID);
 
             gameObjects[nextAvailableSlot].SetActive(false);
 
-            InitializeAvatar(clientID);
+            InitializeAvatar(ownClientID);
 
             mainClientIndex = nextAvailableSlot;
 
-            var temp = avatarEntityGroupFromClientId[clientID].transform;
+            var temp = avatarEntityGroupFromClientId[ownClientID].transform;
 
-            var ROT = entityManager.GetComponentData<Rotation>(avatarEntityGroupFromClientId[clientID].rootEntity).Value.value;//.entity_data.rot;
+            var ROT = entityManager.GetComponentData<Rotation>(avatarEntityGroupFromClientId[ownClientID].rootEntity).Value.value;//.entity_data.rot;
 
             //To prevent offset issues when working with editor
 #if UNITY_WEBGL && !UNITY_EDITOR || TESTING_BEFORE_BUILDING
@@ -301,10 +305,10 @@ namespace Komodo.Runtime
 
         public void DisplayOwnClientIsConnected ()
         {
-            DisplayClientIsConnected(mainClientName, NetworkUpdateHandler.Instance.client_id);
+            DisplayClientIsConnected(mainClientName, ownClientID);
         }
 
-        public void DisplayClientIsConnected (string name, int clientID)
+        public void DisplayClientIsConnected (string username, int clientID)
         {
             if (!UIManager.IsAlive)
             {
@@ -312,7 +316,7 @@ namespace Komodo.Runtime
             }
             else
             {
-                UIManager.Instance.clientTagSetup.CreateTextFromString(name, clientID); // TODO(Brandon): rename to CreateClientConnectedIndicator
+                UIManager.Instance.clientTagSetup.CreateTextFromString(username, clientID); // TODO(Brandon): rename to CreateClientConnectedIndicator
             }
         }
 
@@ -355,7 +359,7 @@ namespace Komodo.Runtime
 
             clientIDs.Add(clientID);
 
-            string nameLabel = NetworkUpdateHandler.Instance.GetPlayerNameFromClientID(clientID);
+            string nameLabel = sessionData.GetPlayerNameFromClientID(clientID);
 
             // Skip avatars that are already on, and your own client's spot. We need this loop because 
             // if someone in the middle of the list disconnected, we should reuse their avatar index.
@@ -414,8 +418,8 @@ namespace Komodo.Runtime
 
         public void AddNewClient(int clientID, bool isMainPlayer = false)
         {
-            if (clientID == NetworkUpdateHandler.Instance.client_id && !isMainPlayer)
-            { 
+            if (clientID == ownClientID && !isMainPlayer)
+            {
                 Debug.LogError($"AddNewClient was requested for own client ID ({clientID}) when isMainPlayer was false. Skipping.");
 
                 return;
@@ -434,7 +438,7 @@ namespace Komodo.Runtime
 
             clientIDs.Add(clientID);
 
-            string nameLabel = NetworkUpdateHandler.Instance.GetPlayerNameFromClientID(clientID);
+            string nameLabel = sessionData.GetPlayerNameFromClientID(clientID);
 
             if (clientIDs.Count >= clientReserveCount)
             {
@@ -576,17 +580,11 @@ namespace Komodo.Runtime
 
         public void DisplayOwnClientIsDisconnected ()
         {
-            DisplayClientIsDisconnected(NetworkUpdateHandler.Instance.client_id);
+            DisplayClientIsDisconnected(ownClientID);
         }
 
         public void DisplayClientIsDisconnected (int clientID)
         {
-            if (clientID == NetworkUpdateHandler.Instance.client_id)
-            {
-                // Don't do anything if our own client is disconnected.
-                return;
-            }
-            
             if (UIManager.IsAlive)
             {
                 UIManager.Instance.clientTagSetup.DeleteTextFromString(usernameFromClientId[clientID]);
@@ -638,7 +636,7 @@ namespace Komodo.Runtime
                 int id = clientIDs[i];
 
                 // Don't remove your own client.
-                if (clientIDs[i] == NetworkUpdateHandler.Instance.client_id)
+                if (clientIDs[i] == ownClientID)
                 {
                     i -= 1;
 
@@ -674,7 +672,7 @@ namespace Komodo.Runtime
 
         public void AddClientIfNeeded (int id)
         {
-            if (NetworkUpdateHandler.Instance.client_id == id)
+            if (ownClientID == id)
             {
                 Debug.LogWarning($"AddClientIfNeeded: {id} is own client. Skipping.");
 
@@ -1036,7 +1034,7 @@ namespace Komodo.Runtime
         public void SendMenuInteractionsType(int interaction) {
             NetworkUpdateHandler.Instance.SendSyncInteractionMessage (new Interaction 
             {
-                sourceEntity_id = NetworkUpdateHandler.Instance.client_id,
+                sourceEntity_id = ownClientID,
 
                 interactionType = interaction,
 
