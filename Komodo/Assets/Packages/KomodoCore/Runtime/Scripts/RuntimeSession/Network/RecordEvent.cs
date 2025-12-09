@@ -32,7 +32,7 @@ namespace Komodo.Runtime
 #if UNITY_WEBGL && !UNITY_EDITOR || TESTING_BEFORE_BUILDING
         ToggleCapture(0,session_id);
 #else
-            SocketIOEditorSimulator.Instance.ToggleCapture(0, session_id);
+            SocketIOClientSimulator.Instance.ToggleCapture(0, session_id);
 #endif
         }
 
@@ -43,7 +43,7 @@ namespace Komodo.Runtime
 #if UNITY_WEBGL && !UNITY_EDITOR || TESTING_BEFORE_BUILDING
         ToggleCapture(1, session_id);
 #else
-            SocketIOEditorSimulator.Instance.ToggleCapture(0, session_id);
+            SocketIOClientSimulator.Instance.ToggleCapture(0, session_id);
 #endif
         }
     }

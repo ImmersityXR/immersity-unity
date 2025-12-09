@@ -52,7 +52,7 @@ namespace Komodo.Runtime
     enum SessionDetailsSource {
         SOCKET_IO_JSLIB = 0, // Read from relay.js file's initialization of the window.details object.
         SESSION_DATA_FILE = 1, // Read from manually edited Unity file.
-        SOCKET_IO_SIMULATOR = 2, // Read from hardcoded value in SocketIOEditorSimulator.cs.
+        SOCKET_IO_SIMULATOR = 2, // Read from hardcoded value in SocketIOClientSimulator.cs.
     } 
 
     //We use interfaces to centralize our update calls and optimize crossing between manage and native code see GameStateManager.cs
@@ -67,7 +67,7 @@ namespace Komodo.Runtime
 #if UNITY_WEBGL && !UNITY_EDITOR 
         // don't declare a socket simulator for WebGL build
 #else
-        private SocketIOEditorSimulator SocketSim;
+        private SocketIOClientSimulator SocketSim;
 #endif
         
         private SessionDetailsSource sessionDetailsSource;
@@ -176,10 +176,10 @@ namespace Komodo.Runtime
 #if UNITY_WEBGL && !UNITY_EDITOR 
             //don't assign a SocketIO Simulator for WebGL build
 #else
-            SocketSim = SocketIOEditorSimulator.Instance;
+            SocketSim = SocketIOClientSimulator.Instance;
             if (!SocketSim)
             {
-                Debug.LogWarning("No SocketIOEditorSimulator was found in the scene. In-editor behavior may not be as expected.");
+                Debug.LogWarning("No SocketIOClientSimulator was found in the scene. In-editor behavior may not be as expected.");
             }
 #endif
         }
@@ -225,7 +225,7 @@ namespace Komodo.Runtime
                     break;
                 case SessionDetailsSource.SOCKET_IO_SIMULATOR:
                     sessionData.models.Clear();
-                    sessionDetailsString = SocketIOEditorSimulator.GetSessionDetails();
+                    sessionDetailsString = SocketIOClientSimulator.GetSessionDetails();
                     break;
                 case SessionDetailsSource.SESSION_DATA_FILE:
                     //models will be autopopulated from sessionData object
@@ -419,7 +419,7 @@ namespace Komodo.Runtime
 #if UNITY_WEBGL && !UNITY_EDITOR 
             string SessionDetailsString = SocketIOJSLib.GetSessionDetails();
 #else
-            string SessionDetailsString = SocketIOEditorSimulator.GetSessionDetails();
+            string SessionDetailsString = SocketIOClientSimulator.GetSessionDetails();
 #endif
             var Details = JsonUtility.FromJson<SessionDetails>(SessionDetailsString);
 

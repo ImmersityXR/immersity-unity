@@ -17,7 +17,7 @@ namespace Komodo.Runtime
         }
         private ConnectionAdapter connectionAdapter;
 
-        private SocketIOEditorSimulator socketSim;
+        private SocketIOClientSimulator socketSim;
 
         private NetworkUpdateHandler netUpdateHandler;
 
@@ -31,11 +31,11 @@ namespace Komodo.Runtime
                 Debug.LogError("SocketIOAdapter: No object of type ConnectionAdapter was found in the scene.");
             }
 
-            socketSim = SocketIOEditorSimulator.Instance;
+            socketSim = SocketIOClientSimulator.Instance;
 
             if (socketSim == null)
             {
-                Debug.LogError("SocketIOAdapter: No SocketIOEditorSimulator.Instance was found in the scene.");
+                Debug.LogError("SocketIOAdapter: No SocketIOClientSimulator.Instance was found in the scene.");
             }
 
             netUpdateHandler = NetworkUpdateHandler.Instance;
@@ -56,7 +56,7 @@ namespace Komodo.Runtime
             string nameOnWindow = SocketIOJSLib.SetSocketIOAdapterName(gameObject.name);
 #else
 
-            string nameOnWindow = SocketIOEditorSimulator.Instance.SetSocketIOAdapterName(gameObject.name);
+            string nameOnWindow = SocketIOClientSimulator.Instance.SetSocketIOAdapterName(gameObject.name);
 #endif
 
             if (nameOnWindow != gameObject.name)

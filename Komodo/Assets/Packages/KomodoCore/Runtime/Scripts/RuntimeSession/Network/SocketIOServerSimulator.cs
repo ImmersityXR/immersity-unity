@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Komodo.Runtime
 {
-    public class NetworkSimulator : MonoBehaviour {
+    public class SocketIOServerSimulator : MonoBehaviour {
 
         [ShowOnly]
         public string hint = "Use the context menu on this component.";
@@ -77,7 +77,7 @@ namespace Komodo.Runtime
 #if UNITY_WEBGL && !UNITY_EDITOR
     //do nothing, so the compiler doesn't complain
 #else
-            SocketIOEditorSimulator.Instance.RelayPositionUpdate(arr_pos);
+            SocketIOClientSimulator.Instance.RelayPositionUpdate(arr_pos);
 #endif
 
         }

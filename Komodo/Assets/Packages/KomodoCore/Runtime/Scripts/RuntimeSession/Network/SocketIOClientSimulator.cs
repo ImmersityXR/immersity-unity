@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Komodo.Runtime
 {
-    public class SocketIOEditorSimulator : SingletonComponent<SocketIOEditorSimulator>
+    public class SocketIOClientSimulator : SingletonComponent<SocketIOClientSimulator>
     {
-        public static SocketIOEditorSimulator Instance
+        public static SocketIOClientSimulator Instance
         {
-            get { return (SocketIOEditorSimulator) _Instance; }
+            get { return (SocketIOClientSimulator) _Instance; }
             set { _Instance = value; }
         }
 
