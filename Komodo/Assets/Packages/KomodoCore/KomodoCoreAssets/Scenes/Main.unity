@@ -3173,6 +3173,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1369871393 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3522948260556549517, guid: 0a1fe9a4692a92b429808dc7c4de1de1,
+    type: 3}
+  m_PrefabInstance: {fileID: 6164736969038234896}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e31af09215ccb384c9be0c77a33aba7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1429055714
 GameObject:
   m_ObjectHideFlags: 0
@@ -4247,7 +4259,7 @@ MonoBehaviour:
   initialLoadingCanvasProgressText: {fileID: 845803811}
   isModelButtonListReady: 0
   isSceneButtonListReady: 0
-  clientTagSetup: {fileID: 0}
+  usernamesListController: {fileID: 1369871393}
   modelVisibilityToggleList: []
   modelLockToggleList: []
   sessionAndBuildName: {fileID: 0}

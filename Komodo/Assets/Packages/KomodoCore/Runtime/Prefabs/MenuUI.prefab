@@ -228,7 +228,7 @@ MonoBehaviour:
   buttonTemplate: {fileID: 1155860353542352, guid: c94fc7e06caed6d46847492cc9797b19,
     type: 3}
   transformToPlaceButtonUnder: {fileID: 4566659512119471822}
-  modelData: {fileID: 11400000, guid: db1c1f0b227417243a9386a0bffdac56, type: 2}
+  sessionData: {fileID: 11400000, guid: db1c1f0b227417243a9386a0bffdac56, type: 2}
 --- !u!114 &8928291943553237011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4856,7 +4856,7 @@ MonoBehaviour:
   undoButton: {fileID: 4890615313850722620}
   recenterButton: {fileID: 7700205267672626256}
   drawButton: {fileID: 8847922015784646539}
-  sessionAndBuildText: {fileID: 2548908531124012491}
+  sessionText: {fileID: 2548908531124012491}
   hoverCursor: {fileID: 8457062631950154444}
   cursor: {fileID: 7700205267314153952}
   cursorGraphic: {fileID: 0}
@@ -4872,8 +4872,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e31af09215ccb384c9be0c77a33aba7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transformToAddTextUnder: {fileID: 4098905725029204462}
-  textProfile: {fileID: 3221962011810741232, guid: 1eeec9e7059d03542bab5af1b649f3cb,
+  sessionData: {fileID: 11400000, guid: db1c1f0b227417243a9386a0bffdac56, type: 2}
+  listParent: {fileID: 4098905725029204462}
+  usernameText: {fileID: 3221962011810741232, guid: 1eeec9e7059d03542bab5af1b649f3cb,
     type: 3}
 --- !u!114 &5937229087140923236
 MonoBehaviour:

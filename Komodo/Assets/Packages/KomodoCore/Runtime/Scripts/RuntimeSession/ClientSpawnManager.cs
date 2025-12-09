@@ -164,6 +164,8 @@ namespace Komodo.Runtime
             {
                 yield return new WaitUntil(() => UIManager.Instance.IsReady()); //TODO(Brandon): prevent a failed menu from stopping the whole client
             }
+            
+            usernamesListController = UIManager.Instance.usernamesListController;
 
             //yield return new WaitUntil(() => SessionStateManager.Instance.IsReady()); TODO(Brandon): fully remove this line if it's working
 
@@ -316,7 +318,7 @@ namespace Komodo.Runtime
             }
             else
             {
-                UIManager.Instance.clientTagSetup.CreateTextFromString(username, clientID); // TODO(Brandon): rename to CreateClientConnectedIndicator
+                usernamesListController.AddListItem(clientID);
             }
         }
 
@@ -495,7 +497,7 @@ namespace Komodo.Runtime
                 }
                 else
                 {
-                    UIManager.Instance.clientTagSetup.CreateTextFromString(nameLabel, clientID);
+                    usernamesListController.AddListItem(clientID);
                 }
 
                 //select how to handle avatars
@@ -587,7 +589,7 @@ namespace Komodo.Runtime
         {
             if (UIManager.IsAlive)
             {
-                UIManager.Instance.clientTagSetup.DeleteTextFromString(usernameFromClientId[clientID]);
+                usernamesListController.RemoveListItem(usernameFromClientId[clientID]);
             }
             else
             {
@@ -658,7 +660,7 @@ namespace Komodo.Runtime
                     await Task.Delay(1);
 
                 if (UIManager.IsAlive)
-                    UIManager.Instance.clientTagSetup.DeleteTextFromString(usernameFromClientId[clientID]);
+                    usernamesListController.RemoveListItem(usernameFromClientId[clientID]);
 
                 avatarEntityGroupFromClientId[clientID].transform.parent.gameObject.SetActive(false);
                 //   _availableClientIDToGODict.Remove(clientID);
@@ -920,6 +922,7 @@ namespace Komodo.Runtime
         #endregion
 
         List<AvatarEntityGroup> avatars = new List<AvatarEntityGroup>();
+        private UsernamesListController usernamesListController;
 
         #region Setup Client Spots
         public IEnumerator InstantiateReservedClients()

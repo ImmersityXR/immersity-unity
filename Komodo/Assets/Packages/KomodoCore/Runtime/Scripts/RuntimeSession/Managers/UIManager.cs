@@ -5,6 +5,7 @@ using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 using Komodo.Utilities;
+using UnityEngine.Serialization;
 
 namespace Komodo.Runtime
 {
@@ -87,8 +88,7 @@ namespace Komodo.Runtime
         [ShowOnly]
         public bool isSceneButtonListReady;
 
-        [HideInInspector]
-        public ChildTextCreateOnCall clientTagSetup;
+        [FormerlySerializedAs("clientTagSetup")] public UsernamesListController usernamesListController;
 
         //References for displaying user name tags and speechtotext text
         private List<Text> clientUser_Names_UITextReference_list = new List<Text>();
@@ -179,7 +179,7 @@ namespace Komodo.Runtime
 
             menuTransform = menuCanvas.GetComponent<RectTransform>();
            
-            clientTagSetup = menu.GetComponent<ChildTextCreateOnCall>();
+            usernamesListController = menu.GetComponent<UsernamesListController>();
 
             sessionAndBuildName = menu.GetComponent<MainUIReferences>().sessionText;
 
