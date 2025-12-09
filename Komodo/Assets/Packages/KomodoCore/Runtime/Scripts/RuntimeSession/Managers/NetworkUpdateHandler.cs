@@ -416,14 +416,9 @@ namespace Komodo.Runtime
 
         public string GetPlayerNameFromClientID(int clientID)
         {
-#if UNITY_WEBGL && !UNITY_EDITOR 
-            string SessionDetailsString = SocketIOJSLib.GetSessionDetails();
-#else
-            string SessionDetailsString = SocketIOClientSimulator.GetSessionDetails();
-#endif
-            var Details = JsonUtility.FromJson<SessionDetails>(SessionDetailsString);
+            var details = sessionData;
 
-            foreach (User user in Details.users)
+            foreach (User user in details.users)
             {
                 if (clientID != user.student_id)
                 {
@@ -433,7 +428,7 @@ namespace Komodo.Runtime
                 return user.first_name + "  " + user.last_name;
             }
 
-            return "Client " + clientID;
+            return "User " + clientID;
         }
 
         // Use the inspector to call this method.

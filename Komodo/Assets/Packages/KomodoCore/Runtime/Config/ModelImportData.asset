@@ -20,7 +20,23 @@ MonoBehaviour:
   app_and_build: editor/v9.9.9
   session_id: 99
   session_name: Hello World!
-  users: []
+  users:
+  - student_id: 0
+    first_name: Stu
+    last_name: Dent
+    email: 
+  - student_id: 1
+    first_name: Pew
+    last_name: Pull
+    email: 
+  - student_id: 2
+    first_name: Sub
+    last_name: Ject
+    email: 
+  - student_id: 3
+    first_name: Lerr
+    last_name: Nerr
+    email: 
   models:
   - name: Dragon whole
     id: 111420
