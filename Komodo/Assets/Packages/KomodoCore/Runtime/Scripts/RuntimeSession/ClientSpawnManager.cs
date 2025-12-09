@@ -275,6 +275,7 @@ namespace Komodo.Runtime
             clientIDs.Add(ownClientID);
 
             mainClientName = sessionData.GetPlayerNameFromClientID(ownClientID);
+            usernameFromClientId[ownClientID] = mainClientName;
 
             gameObjects[nextAvailableSlot].SetActive(false);
 
