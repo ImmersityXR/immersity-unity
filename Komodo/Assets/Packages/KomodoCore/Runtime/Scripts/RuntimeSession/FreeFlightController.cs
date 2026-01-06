@@ -18,7 +18,7 @@ namespace Komodo.Runtime
         [Tooltip("Rotation sensitivity")]
         public float rotationSensitivity = 3f;
 
-        public bool naturalRotationDirection = true;
+        public bool naturalRotationDirection;
 
         [Tooltip("Enable/disable translation control. For use in Unity editor only.")]
         public bool translationEnabled = true;
@@ -61,6 +61,7 @@ namespace Komodo.Runtime
         private float minimumY = -90f;
         private float maximumY = 90f;
 
+        [SerializeField] private bool isMenuOpen;
 
         //to check on ui over objects to disable mouse drag while clicking buttons
         private StandaloneDesktopInputModule standaloneInputModule_Desktop;
@@ -120,19 +121,48 @@ namespace Komodo.Runtime
             //teleportPlayer.BeginPlayerHeightCalibration(left hand? right hand?); //TODO turn back on and ask for handedness 
         }
 
-
+        private bool isFocused;
         public void OnUpdate(float deltaTime)
         {
+            if (Input.GetKeyUp(KeyCode.Escape))
+            {
+                if (isMenuOpen)
+                {
+                    isMenuOpen = false;
+                }
+                else
+                {
+                    isFocused = false;
+                }
+            }
+            
+            if (Input.GetKeyUp(KeyCode.Tab))
+            {
+                isMenuOpen = !isMenuOpen;
+            }
+
+            if (Input.GetMouseButton(0))
+            {
+                isFocused = true;
+            }
+            
+            UIManager.Instance.ToggleMenuVisibility(isMenuOpen);
+
+            if (isFocused)
+            {
+                Cursor.lockState = isMenuOpen ? CursorLockMode.Confined : CursorLockMode.Locked;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+            }
+            
             if (translationEnabled)
             {
                 MovePlayerFromInput();
             }
 
-            if (IsMouseInteractingWithMenu()) {
-                return;
-            }
-
-            if ((rotationEnabled && Input.GetMouseButton(0)) || (rotationEnabled && Input.GetMouseButton(1)))
+            if (Cursor.lockState == CursorLockMode.Locked)
             {
                 RotatePlayerFromInput();
             }

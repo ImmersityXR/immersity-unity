@@ -938,7 +938,7 @@ Rigidbody:
   m_CollisionDetection: 3
 --- !u!95 &2397460870346485786
 Animator:
-  serializedVersion: 3
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -951,10 +951,12 @@ Animator:
   m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &2310410839999614757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1237,7 +1239,7 @@ Rigidbody:
   m_CollisionDetection: 3
 --- !u!95 &2397532874406908082
 Animator:
-  serializedVersion: 3
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1250,10 +1252,12 @@ Animator:
   m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &2310716809689014112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1586,7 +1590,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationEnabled: 1
   rotationSensitivity: 3
-  naturalRotationDirection: 1
+  naturalRotationDirection: 0
   translationEnabled: 1
   panSensitivity: 0.1
   naturalPanDirection: 1
@@ -1598,6 +1602,7 @@ MonoBehaviour:
   floorIndicator: {fileID: 7025737383977934158}
   spectatorCamera: {fileID: 2310806580219041903}
   teleportationIndicator: {fileID: 3960927628016846710}
+  isMenuOpen: 0
   teleportPlayer: {fileID: 2312374686204318205}
 --- !u!1 &2311064594000191400
 GameObject:
