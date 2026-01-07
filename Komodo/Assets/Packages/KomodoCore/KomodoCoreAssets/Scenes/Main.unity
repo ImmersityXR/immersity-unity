@@ -124,6 +124,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &22586903 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 587153344980318864, guid: 0a1fe9a4692a92b429808dc7c4de1de1,
+    type: 3}
+  m_PrefabInstance: {fileID: 6164736969038234896}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8decd5fbb716b0418a3d1dcaaca4661, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!850595691 &29942463
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -1165,7 +1177,6 @@ Transform:
   - {fileID: 426946537}
   - {fileID: 1858107718}
   - {fileID: 6336768844094401975}
-  - {fileID: 2293271301178755395}
   - {fileID: 1429055715}
   - {fileID: 1181673039}
   - {fileID: 1049092076}
@@ -2937,7 +2948,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 275040465}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1147076528
 GameObject:
@@ -3060,7 +3071,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 275040465}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1181673040
 MonoBehaviour:
@@ -3236,7 +3247,7 @@ Transform:
   - {fileID: 95875735}
   - {fileID: 1672672472}
   m_Father: {fileID: 275040465}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1429055716
 MonoBehaviour:
@@ -4287,8 +4298,6 @@ MonoBehaviour:
   rightHandedMenuAnchor: {fileID: 1893410758970639827}
   initialLoadingCanvas: {fileID: 792062164}
   initialLoadingCanvasProgressText: {fileID: 845803811}
-  isModelButtonListReady: 0
-  isSceneButtonListReady: 0
   usernamesListController: {fileID: 1702547258}
   modelVisibilityToggleList: []
   modelLockToggleList: []
@@ -4460,72 +4469,6 @@ Camera:
     type: 3}
   m_PrefabInstance: {fileID: 6164736969038234896}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2293271301178755394
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2293271301178755395}
-  - component: {fileID: 2293271301178755396}
-  m_Layer: 0
-  m_Name: Scene
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2293271301178755395
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2293271301178755394}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.6068726, y: -2.2198677, z: -2.163123}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 275040465}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2293271301178755396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2293271301178755394}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a237891b2ff24f49a53176548ae5a67, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneList: {fileID: 11400000, guid: 16b98a54bf54bc74e8bffe841cb77078, type: 2}
-  sceneButtons: []
-  loadedAdditiveScenes:
-  - ExhibitionDome
-  mainScene:
-    m_Handle: 0
-  additiveScene:
-    m_Handle: 0
-  onNewSceneLoaded:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8474295771467764973}
-        m_TargetAssemblyTypeName: Komodo.Runtime.TeleportPlayer, Komodo.Runtime
-        m_MethodName: SetPlayerSpawnCenter
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &2514538169333949209 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8604378567023896073, guid: 0a1fe9a4692a92b429808dc7c4de1de1,
@@ -6087,6 +6030,7 @@ MonoBehaviour:
   loader: {fileID: 6336768844094401960}
   sessionData: {fileID: 11400000, guid: db1c1f0b227417243a9386a0bffdac56, type: 2}
   settings: {fileID: 11400000, guid: 560593fb59873b64492536d0729b6559, type: 2}
+  modelButtonList: {fileID: 22586903}
   networkedGameObjects: []
   doForceMobileMemoryLimit: 0
   modelsToRetrieve: 0

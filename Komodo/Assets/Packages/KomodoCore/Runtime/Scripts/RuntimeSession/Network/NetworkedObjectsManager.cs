@@ -173,12 +173,7 @@ namespace Komodo.Runtime
                     break;
 
                 case (int) INTERACTIONS.CHANGE_SCENE:
-
-                    if (SceneManagerExtensions.IsAlive)
-                    {
-                        //check the loading wait for changing into a new scene - to avoid loading multiple scenes
-                        SceneManagerExtensions.Instance.SelectScene(interactionData.targetEntity_id);
-                    }
+                    // Obsolete
 
                     break;
 

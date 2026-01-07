@@ -25,6 +25,7 @@ TagManager:
   - LeftEye
   - RightEye
   - CameraSet
+  - EnterVRButton
   layers:
   - Default
   - TransparentFX

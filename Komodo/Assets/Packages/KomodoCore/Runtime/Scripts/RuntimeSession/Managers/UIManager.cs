@@ -79,12 +79,6 @@ namespace Komodo.Runtime
 
         public Text initialLoadingCanvasProgressText;
 
-        [ShowOnly]
-        public bool isModelButtonListReady;
-
-        [ShowOnly]
-        public bool isSceneButtonListReady;
-
         [FormerlySerializedAs("clientTagSetup")] public UsernamesListController usernamesListController;
 
         //References for displaying user name tags and speechtotext text
@@ -598,24 +592,11 @@ namespace Komodo.Runtime
         public bool IsReady ()
         {
             //check managers that we are using for our session
-            if (!SceneManagerExtensions.IsAlive && !ModelImportInitializer.IsAlive) {
-                return true;
+            if (!ModelImportInitializer.IsAlive) {
+                return false;
             }
-
-            if (SceneManagerExtensions.IsAlive && !ModelImportInitializer.IsAlive) {
-                return isSceneButtonListReady;
-            }
-
-            if (!SceneManagerExtensions.IsAlive && ModelImportInitializer.IsAlive) {
-                return isModelButtonListReady;
-            }
-
-            if (SceneManagerExtensions.IsAlive && ModelImportInitializer.IsAlive)
-            {
-                return isModelButtonListReady && isSceneButtonListReady;
-            }
-
-            return false;
+            
+            return ModelImportInitializer.Instance.IsReady;
         }
 
         /// <summary> 
@@ -666,6 +647,8 @@ namespace Komodo.Runtime
             EnableInstructorMenuButton(true);
 
             createTab.GetComponent<TabButton>().onTabDeselected.Invoke();
+
+            menu.ChangeHintsToDesktopMode();
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(settingsMenu.GetComponent<RectTransform>());
 

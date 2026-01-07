@@ -44,6 +44,10 @@ namespace Komodo.Runtime
         [SerializeField]
         private Button closeButton;
 
+        [SerializeField] private GameObject openButtonXRHint;
+
+        [SerializeField] private GameObject openButtonDesktopHint;
+
         public DevelopmentManager developmentManager;
 
         void OnValidate ()
@@ -213,6 +217,18 @@ namespace Komodo.Runtime
         public bool GetVisibility()
         {
             return menuCanvasGroup.blocksRaycasts;
+        }
+
+        public void ChangeHintsToDesktopMode()
+        {
+            openButtonDesktopHint?.SetActive(true);
+            openButtonXRHint?.SetActive(false);
+        }
+
+        public void ChangeHintsToXRMode()
+        {
+            openButtonDesktopHint?.SetActive(false);
+            openButtonXRHint?.SetActive(true);
         }
     }
 }
