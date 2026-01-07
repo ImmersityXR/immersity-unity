@@ -40,13 +40,10 @@ namespace Komodo.Runtime
         public GameObject menuPrefab;
 
         [ShowOnly]
-        public GameObject menu;
+        public KomodoMenu menu;
 
         [ShowOnly]
         public MainUIReferences menuReferences;
-
-        [ShowOnly]
-        public CanvasGroup menuCanvasGroup;
 
         [ShowOnly]
         public Canvas menuCanvas;
@@ -135,17 +132,19 @@ namespace Komodo.Runtime
             }
         }
 
-        public void Start () {
-
-            menu = GameObject.FindWithTag(TagList.menuUI);
+        public void Start ()
+        {
+            GameObject menuContainer = GameObject.FindWithTag(TagList.menuUI);
 
             // create a menu if there isn't one already
-            if (menu == null) 
+            if (menuContainer == null) 
             {
                 Debug.LogWarning("Couldn't find an object tagged MenuUI in the scene, so creating one now");
 
-                menu = Instantiate(menuPrefab);
+                menuContainer = Instantiate(menuPrefab);
             }
+            
+            menu = menuContainer.GetComponent<KomodoMenu>();
 
             hoverCursor = menu.GetComponentInChildren<HoverCursor>(true);
             //TODO -- fix this, because right now Start is not guaranteed to execute after the menu prefab has instantiated its components.
@@ -168,13 +167,6 @@ namespace Komodo.Runtime
             if (menuCanvas == null)
             {
                 throw new System.Exception("You must have a Canvas component");
-            }
-
-            menuCanvasGroup = menu.GetComponentInChildren<CanvasGroup>(true);
-
-            if (menuCanvasGroup == null)
-            {
-                throw new System.Exception("You must have a CanvasGroup component");
             }
 
             menuTransform = menuCanvas.GetComponent<RectTransform>();
@@ -469,30 +461,21 @@ namespace Komodo.Runtime
         }
         */
 
+        public bool GetMenuVisibility()
+        {
+            return menu.GetVisibility();
+        }
+
         public void ToggleMenuVisibility(bool activeState)
         {
-            if (menuCanvasGroup == null) {
-                Debug.LogWarning("Tried to toggle visibility for menuCanvasGroup, but it was null. Skipping.");
+            menu?.ToggleVisibility(activeState);
+            SendMenuVisibilityUpdate(activeState);
+        }
 
-                return;
-            }
-
-            if (activeState)
-            {
-                menuCanvasGroup.alpha = 1;
-
-                menuCanvasGroup.blocksRaycasts = true;
-
-                SendMenuVisibilityUpdate(activeState);
-            }
-            else
-            {
-                menuCanvasGroup.alpha = 0;
-
-                menuCanvasGroup.blocksRaycasts = false;
-
-                SendMenuVisibilityUpdate(activeState);
-            }
+        public void ToggleMenuVisibility()
+        {
+            menu?.ToggleVisibility();
+            SendMenuVisibilityUpdate(menu?.GetVisibility() ?? false);
         }
 
         public void ToggleLeftHandedMenu ()

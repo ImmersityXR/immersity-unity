@@ -61,8 +61,6 @@ namespace Komodo.Runtime
         private float minimumY = -90f;
         private float maximumY = 90f;
 
-        [SerializeField] private bool isMenuOpen;
-
         //to check on ui over objects to disable mouse drag while clicking buttons
         private StandaloneDesktopInputModule standaloneInputModule_Desktop;
 
@@ -126,9 +124,9 @@ namespace Komodo.Runtime
         {
             if (Input.GetKeyUp(KeyCode.Escape))
             {
-                if (isMenuOpen)
+                if (UIManager.Instance.GetMenuVisibility())
                 {
-                    isMenuOpen = false;
+                    UIManager.Instance.ToggleMenuVisibility(false);
                 }
                 else
                 {
@@ -138,19 +136,17 @@ namespace Komodo.Runtime
             
             if (Input.GetKeyUp(KeyCode.Tab))
             {
-                isMenuOpen = !isMenuOpen;
+                UIManager.Instance.ToggleMenuVisibility();
             }
 
             if (Input.GetMouseButton(0))
             {
                 isFocused = true;
             }
-            
-            UIManager.Instance.ToggleMenuVisibility(isMenuOpen);
 
-            if (isFocused)
+            if (isFocused && !UIManager.Instance.GetMenuVisibility())
             {
-                Cursor.lockState = isMenuOpen ? CursorLockMode.Confined : CursorLockMode.Locked;
+                Cursor.lockState = CursorLockMode.Locked;
             }
             else
             {

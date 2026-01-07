@@ -9,6 +9,8 @@ namespace Komodo.Runtime
 {
     public class KomodoMenu : MonoBehaviour
     {
+        public CanvasGroup menuCanvasGroup;
+        
         public TabButton eraseTab;
 
         public Button undoButton;
@@ -32,6 +34,15 @@ namespace Komodo.Runtime
         public GameObject instructorOnlyMenu;
 
         public Button instructorMenuButton;
+
+        [SerializeField]
+        private GameObject collapsedMenu;
+        
+        [SerializeField]
+        private GameObject expandedMenu;
+        
+        [SerializeField]
+        private Button closeButton;
 
         public DevelopmentManager developmentManager;
 
@@ -70,6 +81,13 @@ namespace Komodo.Runtime
 
         public void Start ()
         {
+            menuCanvasGroup = GetComponentInChildren<CanvasGroup>(true);
+
+            if (menuCanvasGroup == null)
+            {
+                throw new System.Exception("You must have a CanvasGroup component");
+            }
+            
             CaptureManager.Initialize();
             
             eraseTab.onTabSelected.AddListener(() => 
@@ -154,7 +172,26 @@ namespace Komodo.Runtime
                     instructorOnlyMenu.SetActive(true);
                 }
             });
+
+            closeButton.onClick.AddListener(() => ToggleVisibility(false));
+        }
+
+        public void ToggleVisibility(bool isVisible)
+        {
+            if (menuCanvasGroup == null) {
+                Debug.LogWarning("Tried to toggle visibility for menuCanvasGroup, but it was null. Skipping.");
+
+                return;
+            }
             
+            menuCanvasGroup.blocksRaycasts = isVisible;
+            collapsedMenu.SetActive(!isVisible);
+            expandedMenu.SetActive(isVisible);
+        }
+
+        public void ToggleVisibility()
+        {
+            ToggleVisibility(!menuCanvasGroup.blocksRaycasts);
         }
 
         // As of Komodo v0.3.2, UIManager does not have a public IsRightHanded function, so we must make do with this workaround. Returns a MenuAnchor.Location value, including UNKNOWN if the parent is not a MenuAnchor.
@@ -171,6 +208,11 @@ namespace Komodo.Runtime
         public void OnDestroy() 
         {
             CaptureManager.Deinitialize();
+        }
+
+        public bool GetVisibility()
+        {
+            return menuCanvasGroup.blocksRaycasts;
         }
     }
 }
