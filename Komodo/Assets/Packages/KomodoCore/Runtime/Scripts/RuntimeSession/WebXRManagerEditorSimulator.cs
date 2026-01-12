@@ -14,7 +14,7 @@ public class WebXRManagerEditorSimulator : MonoBehaviour
     public static event XRChange OnXRChange;
 
     public bool showEnterVRButton;
-    [SerializeField] private Button enterVRButton;
+    public Button enterVRButton;
     private bool isVRButtonActivated;
     private bool previousIsVRActive = false;
     private bool isInitialized;
@@ -25,7 +25,6 @@ public class WebXRManagerEditorSimulator : MonoBehaviour
 
     void Start()
     {
-        enterVRButton = GameObject.FindGameObjectWithTag("EnterVRButton").GetComponent<Button>();
         enterVRButton.onClick.AddListener(() =>
         {
             isVRButtonActivated = !isVRButtonActivated;
