@@ -16,7 +16,7 @@ namespace Komodo.Runtime
             get { return ((EventSystemManager)_Instance); }
             set { _Instance = value; }
         }
-
+        
         //we use cameras for our lazer selection to use Unity Eventsystem
          public TriggerEventInputSource inputSource_LeftHand;
          public TriggerEventInputSource inputSource_RighttHand;
@@ -79,19 +79,16 @@ namespace Komodo.Runtime
 
         private void onXRChange(WebXRState state, int viewsCount, Rect leftRect, Rect rightRect)
         {
-
-            if (state == WebXRState.VR)
-            {
-                SetToXR();
-            }
-            else if (state == WebXRState.NORMAL)
+            if (state == WebXRState.NORMAL) 
             {
                 SetToDesktop();
+                return;
             }
-
+            
+            // state == WebXRState.VR)
+            SetToXR();
         }
 
-        [ContextMenu("Set to Desktop")]
         public void SetToDesktop()
         {
             GetComponent<ToggleMenuDisplayMode>().SetDesktopViewport();
@@ -100,7 +97,6 @@ namespace Komodo.Runtime
             xrStandaloneInput.gameObject.SetActive(false);
         }
 
-        [ContextMenu("Set to XR")]
         public void SetToXR()
         {
             GetComponent<ToggleMenuDisplayMode>().SetVRViewPort();

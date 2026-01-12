@@ -42,7 +42,7 @@ public class ToggleMenuDisplayMode : MonoBehaviour
         }
     }
 
-    [ContextMenu("Set to VR Mode")]
+    [ContextMenu("Set Menu to VR Mode")]
     public void SetVRViewPort() {
 
         if (!UIManager.IsAlive)
@@ -68,7 +68,7 @@ public class ToggleMenuDisplayMode : MonoBehaviour
 
     }
 
-    [ContextMenu("Set to Desktop Mode")]
+    [ContextMenu("Set Menu to Desktop Mode")]
     public void SetDesktopViewport()
     {
         if (!UIManager.IsAlive)
