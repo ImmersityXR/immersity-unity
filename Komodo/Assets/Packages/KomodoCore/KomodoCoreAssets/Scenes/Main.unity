@@ -124,18 +124,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &22586903 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 587153344980318864, guid: 0a1fe9a4692a92b429808dc7c4de1de1,
-    type: 3}
-  m_PrefabInstance: {fileID: 6164736969038234896}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8decd5fbb716b0418a3d1dcaaca4661, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!850595691 &29942463
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -740,7 +728,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 169688521}
-  - component: {fileID: 169688520}
   m_Layer: 0
   m_Name: KomodoV0.3.2Fixes
   m_TagString: Untagged
@@ -748,18 +735,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &169688520
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 169688519}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afc2231327ec50d43ad273c8e7ba4781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &169688521
 Transform:
   m_ObjectHideFlags: 0
@@ -5973,6 +5948,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3522948260556549517, guid: 0a1fe9a4692a92b429808dc7c4de1de1, type: 3}
+    - {fileID: 587153344980318864, guid: 0a1fe9a4692a92b429808dc7c4de1de1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0a1fe9a4692a92b429808dc7c4de1de1, type: 3}
 --- !u!114 &6164736969038234897 stripped
 MonoBehaviour:
@@ -6030,7 +6006,7 @@ MonoBehaviour:
   loader: {fileID: 6336768844094401960}
   sessionData: {fileID: 11400000, guid: db1c1f0b227417243a9386a0bffdac56, type: 2}
   settings: {fileID: 11400000, guid: 560593fb59873b64492536d0729b6559, type: 2}
-  modelButtonList: {fileID: 22586903}
+  modelButtonList: {fileID: 0}
   networkedGameObjects: []
   doForceMobileMemoryLimit: 0
   modelsToRetrieve: 0

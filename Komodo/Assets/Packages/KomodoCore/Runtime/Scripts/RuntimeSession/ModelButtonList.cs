@@ -47,10 +47,12 @@ namespace Komodo.Runtime
         [FormerlySerializedAs("modelData")] public SessionDataTemplate sessionData;
 
         private EntityManager entityManager;
-        
+        public GameObject buttonTemplate;
+        public Transform transformToPlaceButtonUnder;
+
         public bool IsReady { get; private set; }
 
-        public override IEnumerator Start()
+        public IEnumerator Start()
         {
             entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
@@ -61,7 +63,7 @@ namespace Komodo.Runtime
             NotifyIsReady();
         }
 
-        protected override void InitializeButtons()
+        protected void InitializeButtons()
         {
             if (!transformToPlaceButtonUnder)
             {
@@ -102,7 +104,7 @@ namespace Komodo.Runtime
             }
         }
 
-        protected override void NotifyIsReady()
+        protected void NotifyIsReady()
         {
             IsReady = true;
         }

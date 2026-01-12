@@ -110,6 +110,7 @@ namespace Komodo.Runtime
         private EntityManager entityManager;
 
         ClientSpawnManager clientManager;
+        private ModelButtonList modelButtonList;
 
         public void Awake()
         {
@@ -139,6 +140,7 @@ namespace Komodo.Runtime
             }
             
             menu = menuContainer.GetComponent<KomodoMenu>();
+            modelButtonList = menuContainer.GetComponent<ModelButtonList>();
 
             hoverCursor = menu.GetComponentInChildren<HoverCursor>(true);
             //TODO -- fix this, because right now Start is not guaranteed to execute after the menu prefab has instantiated its components.
@@ -591,12 +593,7 @@ namespace Komodo.Runtime
 
         public bool IsReady ()
         {
-            //check managers that we are using for our session
-            if (!ModelImportInitializer.IsAlive) {
-                return false;
-            }
-            
-            return ModelImportInitializer.Instance.IsReady;
+            return modelButtonList?.IsReady ?? false;
         }
 
         /// <summary> 

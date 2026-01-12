@@ -65,10 +65,6 @@ namespace Komodo.Runtime
         //root object of runtime-imported models
         private GameObject list;
 
-        [SerializeField] private ModelButtonList modelButtonList;
-
-        public bool IsReady => modelButtonList?.IsReady ?? false;
-
         private string listName = "Imported Models";
 
         public List<NetworkedGameObject> networkedGameObjects = new List<NetworkedGameObject>();
