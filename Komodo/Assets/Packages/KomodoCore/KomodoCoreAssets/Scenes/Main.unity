@@ -5571,6 +5571,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -146
       objectReference: {fileID: 0}
+    - target: {fileID: 6245803577822663313, guid: 0a1fe9a4692a92b429808dc7c4de1de1,
+        type: 3}
+      propertyPath: showEnterVRButton
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6268009653690956945, guid: 0a1fe9a4692a92b429808dc7c4de1de1,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -6006,7 +6011,6 @@ MonoBehaviour:
   loader: {fileID: 6336768844094401960}
   sessionData: {fileID: 11400000, guid: db1c1f0b227417243a9386a0bffdac56, type: 2}
   settings: {fileID: 11400000, guid: 560593fb59873b64492536d0729b6559, type: 2}
-  modelButtonList: {fileID: 0}
   networkedGameObjects: []
   doForceMobileMemoryLimit: 0
   modelsToRetrieve: 0

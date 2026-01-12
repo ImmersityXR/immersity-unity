@@ -1,10 +1,12 @@
 ﻿//#define TESTING_BEFORE_BUILDING
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using WebXR;
 using Komodo.Utilities;
 using System.Collections.Generic;
+using UnityEngine.XR.Management;
 
 namespace Komodo.Runtime
 {
@@ -54,18 +56,10 @@ namespace Komodo.Runtime
                 Debug.LogError("We are missing xREventsystem (EventSystemRayCastCameras.cs", gameObject);
         }
 
-        //public void Start()
-        //{
-        //    ////check if we have a menu available in our UIManager
-        //    //if (UIManager.Instance.menuCanvas != null)
-        //    //{
-        //    //    //if we have one add it to the last canvas array index
-        //    //    canvasesToReceiveEvents[canvasesToReceiveEvents.Length - 1] = UIManager.Instance.menuCanvas;
-
-
-        //    //}
-        //  //  xrStandaloneInput.gameObject.SetActive(false);
-        //}
+        public IEnumerator Start()
+        {
+            yield return XRGeneralSettings.Instance.Manager.InitializeLoader();
+        }
 
         public WebXRState GetXRCurrentState()
         {
@@ -91,6 +85,7 @@ namespace Komodo.Runtime
 
         public void SetToDesktop()
         {
+            XRGeneralSettings.Instance.Manager.StopSubsystems();
             GetComponent<ToggleMenuDisplayMode>().SetDesktopViewport();
             //turn on and off appropriate eventsystem to handle appropriate input
             desktopStandaloneInput.gameObject.SetActive(true);
@@ -99,6 +94,13 @@ namespace Komodo.Runtime
 
         public void SetToXR()
         {
+            if (XRGeneralSettings.Instance.Manager.activeLoader == null) 
+            {
+            
+            } else
+            {
+                XRGeneralSettings.Instance.Manager.StartSubsystems(); 
+            }
             GetComponent<ToggleMenuDisplayMode>().SetVRViewPort();
             desktopStandaloneInput.gameObject.SetActive(false);
             xrStandaloneInput.gameObject.SetActive(true);
@@ -208,5 +210,9 @@ namespace Komodo.Runtime
 
         }
 
+        public void OnApplicationQuit() 
+        {
+            XRGeneralSettings.Instance.Manager.DeinitializeLoader();
+        }
     }
 }
