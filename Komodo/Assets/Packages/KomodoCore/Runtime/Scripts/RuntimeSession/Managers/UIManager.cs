@@ -650,5 +650,24 @@ namespace Komodo.Runtime
             LayoutRebuilder.ForceRebuildLayoutImmediate(settingsMenu.GetComponent<RectTransform>());
 
         }
+
+        public void SetMenuToVRMode()
+        {
+            EnableCursor();
+
+            PlaceMenuOnCurrentHand();
+
+            ConvertMenuToAlwaysExpanded();
+
+            EnableCreateMenu(true);
+
+            HeightCalibrationButtonsSettings(true);
+
+            EnableInstructorMenuButton(false);
+
+            menu.ChangeHintsToXRMode();
+
+            EnableIgnoreLayoutForVRmode(false);
+        }
     }
 }

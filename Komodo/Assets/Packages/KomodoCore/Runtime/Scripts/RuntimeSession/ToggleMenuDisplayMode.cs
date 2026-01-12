@@ -43,29 +43,16 @@ public class ToggleMenuDisplayMode : MonoBehaviour
     }
 
     [ContextMenu("Set Menu to VR Mode")]
-    public void SetVRViewPort() {
-
+    public void SetVRViewPort()
+    {
         if (!UIManager.IsAlive)
         {
             Debug.LogWarning("UIManager is not alive; called by SetVRViewPort()");
             return;
 
         }
-        uiManager.EnableCursor();
-        //TODO: One of the above actually does the job. Which is it?
 
-        uiManager.PlaceMenuOnCurrentHand();
-
-        uiManager.ConvertMenuToAlwaysExpanded();
-
-        uiManager.EnableCreateMenu(true);
-
-        uiManager.HeightCalibrationButtonsSettings(true);
-
-        uiManager.EnableInstructorMenuButton(false);
-
-        uiManager.EnableIgnoreLayoutForVRmode(false);
-
+        uiManager.SetMenuToVRMode();
     }
 
     [ContextMenu("Set Menu to Desktop Mode")]
