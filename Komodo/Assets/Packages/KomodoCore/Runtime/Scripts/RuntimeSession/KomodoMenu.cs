@@ -31,6 +31,8 @@ namespace Komodo.Runtime
 
         public TabButton createTab;
 
+        public TabButton developerTab;
+
         public GameObject instructorOnlyMenu;
 
         public Button instructorMenuButton;
@@ -60,6 +62,11 @@ namespace Komodo.Runtime
             if (!drawTab)
             {
                 throw new UnassignedReferenceException("drawTab");
+            }
+
+            if (!developerTab)
+            {
+                throw new UnassignedReferenceException("developerTab");
             }
 
             if (undoButton == null)
@@ -178,6 +185,10 @@ namespace Komodo.Runtime
             });
 
             closeButton.onClick.AddListener(() => ToggleVisibility(false));
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+            developerTab.gameObject.SetActive(false);
+#endif
         }
 
         public void ToggleVisibility(bool isVisible)
