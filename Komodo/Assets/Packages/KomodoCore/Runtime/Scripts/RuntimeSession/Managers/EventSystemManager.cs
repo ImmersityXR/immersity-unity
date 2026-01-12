@@ -56,9 +56,17 @@ namespace Komodo.Runtime
                 Debug.LogError("We are missing xREventsystem (EventSystemRayCastCameras.cs", gameObject);
         }
 
-        public IEnumerator Start()
+        private IEnumerator StartXRLoader()
         {
             yield return XRGeneralSettings.Instance.Manager.InitializeLoader();
+            
+            if (XRGeneralSettings.Instance.Manager.activeLoader == null) 
+            {
+                Debug.Log("No XR Loader was selected.");
+            } else
+            {
+                XRGeneralSettings.Instance.Manager.StartSubsystems(); 
+            }
         }
 
         public WebXRState GetXRCurrentState()
@@ -86,6 +94,7 @@ namespace Komodo.Runtime
         public void SetToDesktop()
         {
             XRGeneralSettings.Instance.Manager.StopSubsystems();
+            XRGeneralSettings.Instance.Manager.DeinitializeLoader();
             GetComponent<ToggleMenuDisplayMode>().SetDesktopViewport();
             //turn on and off appropriate eventsystem to handle appropriate input
             desktopStandaloneInput.gameObject.SetActive(true);
@@ -94,13 +103,7 @@ namespace Komodo.Runtime
 
         public void SetToXR()
         {
-            if (XRGeneralSettings.Instance.Manager.activeLoader == null) 
-            {
-            
-            } else
-            {
-                XRGeneralSettings.Instance.Manager.StartSubsystems(); 
-            }
+            StartCoroutine(StartXRLoader());
             GetComponent<ToggleMenuDisplayMode>().SetVRViewPort();
             desktopStandaloneInput.gameObject.SetActive(false);
             xrStandaloneInput.gameObject.SetActive(true);
