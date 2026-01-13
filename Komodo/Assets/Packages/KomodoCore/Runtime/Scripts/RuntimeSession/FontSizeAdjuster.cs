@@ -29,6 +29,24 @@ namespace Komodo.Runtime
 
         private static int _currentIndex = 8; // size 16
 
+        public void Start()
+        {
+            _Apply();
+        }
+
+        public void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.KeypadEquals))
+            {
+                Increase();
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
+            {
+                Decrease();
+            }
+        }
+
         [ContextMenu("Increase")]
         public void Increase ()
         {
@@ -54,7 +72,6 @@ namespace Komodo.Runtime
         private void _Apply ()
         {
             Debug.Log($"Font size is now {_sizes[_currentIndex]}");
-
 
             foreach (var text in GetComponentsInChildren<AdjustableText>())
             {
