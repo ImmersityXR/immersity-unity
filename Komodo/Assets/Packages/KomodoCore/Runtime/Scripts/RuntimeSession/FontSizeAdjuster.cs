@@ -10,21 +10,22 @@ namespace Komodo.Runtime
     public class FontSizeAdjuster : MonoBehaviour
     {
         private readonly int[] _sizes = new int[] {
-            6,
-            7,
-            8,
-            9,
             10,
             11,
             12,
             14,
             16, // default
             18,
+            20,
             24,
             28,
+            32,
             36,
-            72,
-            80
+            40,
+            44,
+            58,
+            64,
+            70,
         };
 
         private static int _currentIndex = 8; // size 16
