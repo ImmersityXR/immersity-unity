@@ -9,6 +9,15 @@ namespace Komodo.Runtime
 {
     public class FontSizeAdjuster : MonoBehaviour
     {
+        enum SymbolDisplayMode
+        {
+            IconsAndText,
+            TextOnly,
+            IconsOnly,
+        }
+
+        private SymbolDisplayMode _symbolDisplayMode;
+        
         private readonly int[] _sizes = new int[] {
             10,
             11,
@@ -46,6 +55,65 @@ namespace Komodo.Runtime
             {
                 Decrease();
             }
+
+            if (Input.GetKeyDown(KeyCode.BackQuote))
+            {
+                CycleSymbolDisplayMode();
+            }
+        }
+
+        private void CycleSymbolDisplayMode()
+        {
+            void disableIcons()
+            {
+                foreach (var icon in Resources.FindObjectsOfTypeAll<AdjustableIcon>())
+                {
+                    icon.gameObject.SetActive(false);
+                }
+            }
+
+            void enableIcons()
+            {
+                foreach (var icon in Resources.FindObjectsOfTypeAll<AdjustableIcon>())
+                {
+                    icon.gameObject.SetActive(true);
+                }
+            }
+
+            void disableText()
+            {
+                foreach (var text in Resources.FindObjectsOfTypeAll<AdjustableText>())
+                {
+                    text.gameObject.SetActive(false);
+                }
+            }
+
+            void enableText()
+            {
+                foreach (var text in Resources.FindObjectsOfTypeAll<AdjustableText>())
+                {
+                    text.gameObject.SetActive(true);
+                }
+            }
+            
+            switch (_symbolDisplayMode)
+            {
+                case SymbolDisplayMode.IconsAndText:
+                    _symbolDisplayMode = SymbolDisplayMode.TextOnly;
+                    disableIcons();
+                    // text will already be enabled
+                    break;
+                case SymbolDisplayMode.TextOnly:
+                    _symbolDisplayMode = SymbolDisplayMode.IconsOnly;
+                    disableText();
+                    enableIcons();
+                    break;
+                case SymbolDisplayMode.IconsOnly:
+                    _symbolDisplayMode = SymbolDisplayMode.IconsAndText;
+                    enableText();
+                    // icons will already be enabled
+                    break;
+            }
         }
 
         [ContextMenu("Increase")]
@@ -74,12 +142,17 @@ namespace Komodo.Runtime
         {
             Debug.Log($"Font size is now {_sizes[_currentIndex]}");
 
-            foreach (var text in GetComponentsInChildren<AdjustableText>())
+            foreach (var text in Resources.FindObjectsOfTypeAll<AdjustableText>())
             {
                 text.fontSize =  _sizes[_currentIndex];
             }
             
-            foreach (var group in GetComponentsInChildren<HorizontalOrVerticalLayoutGroup>())
+            foreach (var group in Resources.FindObjectsOfTypeAll<AdjustableVerticalLayoutGroup>())
+            {
+                group.spacing =  _sizes[_currentIndex] / 4.0f;
+            }
+            
+            foreach (var group in Resources.FindObjectsOfTypeAll<AdjustableHorizontalLayoutGroup>())
             {
                 group.spacing =  _sizes[_currentIndex] / 4.0f;
             }
