@@ -39,8 +39,17 @@ namespace Komodo.Runtime
 
         private static int _currentIndex = 8; // size 28
 
+        public bool IsLargeFormat => _currentIndex >= 11;
+
+        [SerializeField] private Button largerButton;
+        [SerializeField] private Button smallerButton;
+        
+
         public void Start()
         {
+            largerButton.onClick.AddListener(() => Increase());
+            smallerButton.onClick.AddListener(() => Decrease());
+            
             _Apply();
         }
 
@@ -174,6 +183,12 @@ namespace Komodo.Runtime
         {
             _currentIndex = 8;
             _Apply();
+        }
+
+        private void OnDestroy()
+        {
+            largerButton.onClick.RemoveAllListeners();
+            smallerButton.onClick.RemoveAllListeners();
         }
     }
 }
