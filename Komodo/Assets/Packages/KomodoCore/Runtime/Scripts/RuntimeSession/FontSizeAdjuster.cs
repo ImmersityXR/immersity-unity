@@ -23,13 +23,13 @@ namespace Komodo.Runtime
             11,
             12,
             14,
-            16, // default
+            16,
             18,
             20,
             24,
-            28,
+            28, // default
             32,
-            36,
+            36, 
             40,
             44,
             58,
@@ -37,7 +37,7 @@ namespace Komodo.Runtime
             70,
         };
 
-        private static int _currentIndex = 8; // size 16
+        private static int _currentIndex = 8; // size 28
 
         public void Start()
         {
@@ -165,6 +165,15 @@ namespace Komodo.Runtime
                     element.preferredHeight =  _sizes[_currentIndex] * 2.0f;
                 }
             }
+        }
+
+        /// <summary>
+        /// Reset the font to the default so that prefabs are not dirtied during development testing.
+        /// </summary>
+        void OnApplicationQuit()
+        {
+            _currentIndex = 8;
+            _Apply();
         }
     }
 }
