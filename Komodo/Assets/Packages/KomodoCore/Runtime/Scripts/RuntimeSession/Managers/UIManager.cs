@@ -616,16 +616,6 @@ namespace Komodo.Runtime
             instructorMenuButton.gameObject.SetActive(state);
         }
 
-        public void EnableIgnoreLayoutForVRmode(bool state) 
-        {
-            LayoutElement RecenterButton = settingsMenu.transform.Find("NotCalibrating").transform.Find("RecenterButton").GetComponent<LayoutElement>();
-
-            LayoutElement settingsMenuTitle = settingsMenu.transform.Find("Text").GetComponent<LayoutElement>();
-
-            RecenterButton.ignoreLayout = state;
-            settingsMenuTitle.ignoreLayout = state;
-        }
-
         public void SwitchMenuToDesktopMode() 
         {
             DisableCursor();
@@ -666,8 +656,6 @@ namespace Komodo.Runtime
             EnableInstructorMenuButton(false);
 
             menu.ChangeHintsToXRMode();
-
-            EnableIgnoreLayoutForVRmode(false);
         }
     }
 }
