@@ -291,7 +291,7 @@ Transform:
   m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_Children: []
   m_Father: {fileID: 5241146383381699450}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4988830808151884373
 MonoBehaviour:
@@ -1470,12 +1470,12 @@ RectTransform:
   - {fileID: 1827522486665566628}
   - {fileID: 4607186317183391443}
   m_Father: {fileID: 5241146383381699450}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 141, y: 490}
-  m_SizeDelta: {x: 272, y: 528}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7980420431007558287
 MonoBehaviour:
@@ -2284,7 +2284,7 @@ Transform:
   m_LocalScale: {x: 0.7665451, y: 0.7665448, z: 0.7665448}
   m_Children: []
   m_Father: {fileID: 5241146383381699450}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3763806415013207764
 MonoBehaviour:
@@ -2573,7 +2573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   developmentManager: {fileID: 4988830808151884373}
-  textObject: {fileID: 0}
+  textObject: {fileID: 2329668520569549094}
 --- !u!114 &2329668520569549094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4331,7 +4331,7 @@ RectTransform:
   - {fileID: 8115805765314771516}
   - {fileID: 6614583121099507015}
   m_Father: {fileID: 5241146383381699450}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -4541,7 +4541,7 @@ RectTransform:
   - {fileID: 3177812776466529337}
   - {fileID: 8276160394089628789}
   m_Father: {fileID: 5241146383381699450}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -5021,6 +5021,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SettingsMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 9082764231465552527, guid: 2389c0f125064744c93c57252189855b,
+        type: 3}
+      propertyPath: m_Text
+      value: Settings
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2389c0f125064744c93c57252189855b, type: 3}

@@ -33,7 +33,7 @@ RectTransform:
   m_Children:
   - {fileID: 4620890600070221871}
   m_Father: {fileID: 6181184403702844250}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -548,6 +548,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DeveloperMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 9082764231465552527, guid: 2389c0f125064744c93c57252189855b,
+        type: 3}
+      propertyPath: m_Text
+      value: Developer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2389c0f125064744c93c57252189855b, type: 3}

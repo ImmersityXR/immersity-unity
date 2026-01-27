@@ -111,7 +111,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1681064378057917780}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -200,7 +200,7 @@ RectTransform:
   m_Children:
   - {fileID: 5678390884719386115}
   m_Father: {fileID: 1681064378057917780}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -440,7 +440,7 @@ RectTransform:
   - {fileID: 4838054878408614120}
   - {fileID: 7590827601674069056}
   m_Father: {fileID: 1681064378057917780}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -697,7 +697,7 @@ RectTransform:
   m_Children:
   - {fileID: 6934264701515703906}
   m_Father: {fileID: 1681064378057917780}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -879,7 +879,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: fb76ff22f972aa5428776959df315a40, type: 3}
-    m_FontSize: 14
+    m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -1218,6 +1218,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PeopleMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 9082764231465552527, guid: 2389c0f125064744c93c57252189855b,
+        type: 3}
+      propertyPath: m_Text
+      value: People
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2389c0f125064744c93c57252189855b, type: 3}
