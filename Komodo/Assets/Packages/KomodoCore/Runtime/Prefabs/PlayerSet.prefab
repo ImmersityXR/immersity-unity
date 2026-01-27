@@ -1669,7 +1669,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showEnterVRButton: 1
-  enterVRButton: {fileID: 2337336078546165455}
+  enterVRButton: {fileID: 4096991834381665512}
 --- !u!114 &2311064594000191403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7374,9 +7374,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3773d0422e0122743ad9688a0d03d9dd, type: 3}
---- !u!114 &2337336078546165455 stripped
+--- !u!114 &4096991834381665512 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7921139171596441273, guid: 3773d0422e0122743ad9688a0d03d9dd,
+  m_CorrespondingSourceObject: {fileID: 8455816719959329950, guid: 3773d0422e0122743ad9688a0d03d9dd,
     type: 3}
   m_PrefabInstance: {fileID: 5585141783354067062}
   m_PrefabAsset: {fileID: 0}
