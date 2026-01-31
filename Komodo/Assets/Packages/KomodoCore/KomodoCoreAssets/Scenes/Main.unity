@@ -6767,6 +6767,11 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0.74509805
       objectReference: {fileID: 0}
+    - target: {fileID: 2414511842031437664, guid: 0a1fe9a4692a92b429808dc7c4de1de1,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2458133834056968218, guid: 0a1fe9a4692a92b429808dc7c4de1de1,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -9831,6 +9836,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6245803577822663313, guid: 0a1fe9a4692a92b429808dc7c4de1de1,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6245803577822663313, guid: 0a1fe9a4692a92b429808dc7c4de1de1,
+        type: 3}
+      propertyPath: showEnterVRButton
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6268009653690956945, guid: 0a1fe9a4692a92b429808dc7c4de1de1,
         type: 3}
