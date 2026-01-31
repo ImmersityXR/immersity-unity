@@ -28,6 +28,8 @@ public class ToggleMenuDisplayMode : MonoBehaviour
         WebXRManagerEditorSimulator.OnXRChange += ToggleMode;
 #endif
         uiManager = UIManager.Instance;
+        
+        SetDesktopViewport();
     }
 
     private void ToggleMode(WebXRState state, int viewsCount, Rect leftRect, Rect rightRect)
