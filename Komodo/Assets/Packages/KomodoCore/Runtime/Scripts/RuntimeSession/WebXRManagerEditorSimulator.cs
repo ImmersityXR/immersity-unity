@@ -10,7 +10,10 @@ using WebXR;
 public class WebXRManagerEditorSimulator : MonoBehaviour
 {
 #if UNITY_WEBGL && !UNITY_EDITOR || TESTING_BEFORE_BUILDING
-//do nothing
+    public void Awake()
+    {
+        GetComponent<WebXRManager>().enabled = true;
+    }
 #else
     public delegate void XRChange(WebXRState state, int viewsCount, Rect leftRect, Rect rightRect);
 
