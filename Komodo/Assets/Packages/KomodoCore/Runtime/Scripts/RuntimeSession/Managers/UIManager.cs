@@ -5,6 +5,7 @@ using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 using Komodo.Utilities;
+using UnityEngine.Serialization;
 
 namespace Komodo.Runtime
 {
@@ -39,13 +40,10 @@ namespace Komodo.Runtime
         public GameObject menuPrefab;
 
         [ShowOnly]
-        public GameObject menu;
+        public KomodoMenu menu;
 
         [ShowOnly]
         public MainUIReferences menuReferences;
-
-        [ShowOnly]
-        public CanvasGroup menuCanvasGroup;
 
         [ShowOnly]
         public Canvas menuCanvas;
@@ -81,14 +79,7 @@ namespace Komodo.Runtime
 
         public Text initialLoadingCanvasProgressText;
 
-        [ShowOnly]
-        public bool isModelButtonListReady;
-
-        [ShowOnly]
-        public bool isSceneButtonListReady;
-
-        [HideInInspector]
-        public ChildTextCreateOnCall clientTagSetup;
+        [FormerlySerializedAs("clientTagSetup")] public UsernamesListController usernamesListController;
 
         //References for displaying user name tags and speechtotext text
         private List<Text> clientUser_Names_UITextReference_list = new List<Text>();
@@ -119,6 +110,7 @@ namespace Komodo.Runtime
         private EntityManager entityManager;
 
         ClientSpawnManager clientManager;
+        private ModelButtonList modelButtonList;
 
         public void Awake()
         {
@@ -135,17 +127,20 @@ namespace Komodo.Runtime
             }
         }
 
-        public void Start () {
-
-            menu = GameObject.FindWithTag(TagList.menuUI);
+        public void Start ()
+        {
+            GameObject menuContainer = GameObject.FindWithTag(TagList.menuUI);
 
             // create a menu if there isn't one already
-            if (menu == null) 
+            if (menuContainer == null) 
             {
                 Debug.LogWarning("Couldn't find an object tagged MenuUI in the scene, so creating one now");
 
-                menu = Instantiate(menuPrefab);
+                menuContainer = Instantiate(menuPrefab);
             }
+            
+            menu = menuContainer.GetComponent<KomodoMenu>();
+            modelButtonList = menuContainer.GetComponent<ModelButtonList>();
 
             hoverCursor = menu.GetComponentInChildren<HoverCursor>(true);
             //TODO -- fix this, because right now Start is not guaranteed to execute after the menu prefab has instantiated its components.
@@ -170,18 +165,9 @@ namespace Komodo.Runtime
                 throw new System.Exception("You must have a Canvas component");
             }
 
-            menuCanvasGroup = menu.GetComponentInChildren<CanvasGroup>(true);
-
-            if (menuCanvasGroup == null)
-            {
-                throw new System.Exception("You must have a CanvasGroup component");
-            }
-
             menuTransform = menuCanvas.GetComponent<RectTransform>();
-           
-            clientTagSetup = menu.GetComponent<ChildTextCreateOnCall>();
 
-            sessionAndBuildName = menu.GetComponent<MainUIReferences>().sessionAndBuildText;
+            sessionAndBuildName = menu.GetComponent<MainUIReferences>().sessionText;
 
             if (menuTransform == null) 
             {
@@ -236,9 +222,9 @@ namespace Komodo.Runtime
 
         private void DisplaySessionDetails ()
         {
-            sessionAndBuildName.text = NetworkUpdateHandler.Instance.sessionName;
+            sessionAndBuildName.text = NetworkUpdateHandler.Instance.SessionName;
 
-            sessionAndBuildName.text += Environment.NewLine +  NetworkUpdateHandler.Instance.buildName;
+            sessionAndBuildName.text += Environment.NewLine +  NetworkUpdateHandler.Instance.AppAndBuildName;
         }
 
         public bool GetCursorActiveState() 
@@ -471,30 +457,21 @@ namespace Komodo.Runtime
         }
         */
 
+        public bool GetMenuVisibility()
+        {
+            return menu.GetVisibility();
+        }
+
         public void ToggleMenuVisibility(bool activeState)
         {
-            if (menuCanvasGroup == null) {
-                Debug.LogWarning("Tried to toggle visibility for menuCanvasGroup, but it was null. Skipping.");
+            menu?.ToggleVisibility(activeState);
+            SendMenuVisibilityUpdate(activeState);
+        }
 
-                return;
-            }
-
-            if (activeState)
-            {
-                menuCanvasGroup.alpha = 1;
-
-                menuCanvasGroup.blocksRaycasts = true;
-
-                SendMenuVisibilityUpdate(activeState);
-            }
-            else
-            {
-                menuCanvasGroup.alpha = 0;
-
-                menuCanvasGroup.blocksRaycasts = false;
-
-                SendMenuVisibilityUpdate(activeState);
-            }
+        public void ToggleMenuVisibility()
+        {
+            menu?.ToggleVisibility();
+            SendMenuVisibilityUpdate(menu?.GetVisibility() ?? false);
         }
 
         public void ToggleLeftHandedMenu ()
@@ -616,25 +593,7 @@ namespace Komodo.Runtime
 
         public bool IsReady ()
         {
-            //check managers that we are using for our session
-            if (!SceneManagerExtensions.IsAlive && !ModelImportInitializer.IsAlive) {
-                return true;
-            }
-
-            if (SceneManagerExtensions.IsAlive && !ModelImportInitializer.IsAlive) {
-                return isSceneButtonListReady;
-            }
-
-            if (!SceneManagerExtensions.IsAlive && ModelImportInitializer.IsAlive) {
-                return isModelButtonListReady;
-            }
-
-            if (SceneManagerExtensions.IsAlive && ModelImportInitializer.IsAlive)
-            {
-                return isModelButtonListReady && isSceneButtonListReady;
-            }
-
-            return false;
+            return modelButtonList?.IsReady ?? false;
         }
 
         /// <summary> 
@@ -657,16 +616,6 @@ namespace Komodo.Runtime
             instructorMenuButton.gameObject.SetActive(state);
         }
 
-        public void EnableIgnoreLayoutForVRmode(bool state) 
-        {
-            LayoutElement RecenterButton = settingsMenu.transform.Find("NotCalibrating").transform.Find("RecenterButton").GetComponent<LayoutElement>();
-
-            LayoutElement settingsMenuTitle = settingsMenu.transform.Find("Text").GetComponent<LayoutElement>();
-
-            RecenterButton.ignoreLayout = state;
-            settingsMenuTitle.ignoreLayout = state;
-        }
-
         public void SwitchMenuToDesktopMode() 
         {
             DisableCursor();
@@ -686,8 +635,27 @@ namespace Komodo.Runtime
 
             createTab.GetComponent<TabButton>().onTabDeselected.Invoke();
 
+            menu.ChangeHintsToDesktopMode();
+
             LayoutRebuilder.ForceRebuildLayoutImmediate(settingsMenu.GetComponent<RectTransform>());
 
+        }
+
+        public void SetMenuToVRMode()
+        {
+            EnableCursor();
+
+            PlaceMenuOnCurrentHand();
+
+            ConvertMenuToAlwaysExpanded();
+
+            EnableCreateMenu(true);
+
+            HeightCalibrationButtonsSettings(true);
+
+            EnableInstructorMenuButton(false);
+
+            menu.ChangeHintsToXRMode();
         }
     }
 }

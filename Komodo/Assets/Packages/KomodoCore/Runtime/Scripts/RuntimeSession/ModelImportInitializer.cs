@@ -37,6 +37,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Komodo.AssetImport;
 using Komodo.Utilities;
+using UnityEngine.Serialization;
 
 namespace Komodo.Runtime
 {
@@ -57,7 +58,7 @@ namespace Komodo.Runtime
         public ModelDownloaderAndLoader loader;
 
         //downloadable models list
-        public ModelDataTemplate modelData;
+        [FormerlySerializedAs("modelData")] public SessionDataTemplate sessionData;
 
         public ModelImportSettings settings;
 
@@ -85,11 +86,11 @@ namespace Komodo.Runtime
         private IEnumerator Start()
         {
             //WebGLMemoryStats.LogMoreStats("ModelImportInitializer.Start Setup BEFORE");
-
+            
             if (loader == null) {
                 throw new System.Exception("Missing loader");
             }
-            if (modelData == null)
+            if (sessionData == null)
             {
                 throw new System.Exception("Missing model data");
             }
@@ -101,7 +102,7 @@ namespace Komodo.Runtime
             CreateAndSetPositionForModelsList();
 
             //initialize a list of blank gameObjects so we can instantiate models even if they load out-of-order. 
-            for (int i = 0; i < modelData.models.Count; i += 1)
+            for (int i = 0; i < sessionData.models.Count; i += 1)
             {
                 NetworkedGameObject netObject = default;
                 networkedGameObjects.Add(netObject);
@@ -115,7 +116,7 @@ namespace Komodo.Runtime
 
             //since we have coroutines and callbacks, we should keep track of the number of models that have finished retrieving. 
             GameStateManager.Instance.isAssetImportFinished = false;
-            modelsToRetrieve = modelData.models.Count;
+            modelsToRetrieve = sessionData.models.Count;
 
             //Wait until all objects are finished loading
             StartCoroutine(RetrieveModelFiles());
@@ -130,7 +131,7 @@ namespace Komodo.Runtime
 
             //since we have coroutines and callbacks, we should keep track of the number of models that have finished instantiating. 
             GameStateManager.Instance.isAssetImportFinished = false;
-            modelsToInstantiate = modelData.models.Count;
+            modelsToInstantiate = sessionData.models.Count;
 
             //Wait until all objects are finished loading
             StartCoroutine(InstantiateModels());
@@ -159,13 +160,13 @@ namespace Komodo.Runtime
         {
             Text text = UIManager.Instance.initialLoadingCanvasProgressText;
 
-            for (int i = 0; i < modelData.models.Count; i += 1 )
+            for (int i = 0; i < sessionData.models.Count; i += 1 )
             {
                 //Debug.Log($"retrieving model #{i}");
 
                 int menuIndex = i;
 
-                var model = modelData.models[i];
+                var model = sessionData.models[i];
                 VerifyModelData(model);
 
                 progressDisplay.text = $"{model.name}: Retrieving";
@@ -184,7 +185,7 @@ namespace Komodo.Runtime
             {
                 int menuIndex = i;
 
-                var model = modelData.models[i];
+                var model = sessionData.models[i];
                 VerifyModelData(model);
 
                 yield return loader.TryLoadLocalFile(localFiles[i].location, localFiles[i].name, localFiles[i].size, progressDisplay, gObject =>
@@ -202,7 +203,7 @@ namespace Komodo.Runtime
             }
         }
 
-        public void VerifyModelData(ModelDataTemplate.ModelImportData data)
+        public void VerifyModelData(ModelImportData data)
         {
             if (string.IsNullOrEmpty(data.name) || string.IsNullOrWhiteSpace(data.name))
             {

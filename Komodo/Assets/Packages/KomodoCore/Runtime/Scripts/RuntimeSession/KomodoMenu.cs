@@ -9,6 +9,8 @@ namespace Komodo.Runtime
 {
     public class KomodoMenu : MonoBehaviour
     {
+        public CanvasGroup menuCanvasGroup;
+        
         public TabButton eraseTab;
 
         public Button undoButton;
@@ -29,9 +31,26 @@ namespace Komodo.Runtime
 
         public TabButton createTab;
 
+        public TabButton developerTab;
+
         public GameObject instructorOnlyMenu;
 
         public Button instructorMenuButton;
+
+        [SerializeField]
+        private GameObject collapsedMenu;
+        
+        [SerializeField]
+        private GameObject expandedMenu;
+        
+        [SerializeField]
+        private Button closeButton;
+
+        [SerializeField] private GameObject openButtonXRHint;
+
+        [SerializeField] private GameObject openButtonDesktopHint;
+
+        public DevelopmentManager developmentManager;
 
         void OnValidate ()
         {
@@ -43,6 +62,11 @@ namespace Komodo.Runtime
             if (!drawTab)
             {
                 throw new UnassignedReferenceException("drawTab");
+            }
+
+            if (!developerTab)
+            {
+                throw new UnassignedReferenceException("developerTab");
             }
 
             if (undoButton == null)
@@ -68,6 +92,13 @@ namespace Komodo.Runtime
 
         public void Start ()
         {
+            menuCanvasGroup = GetComponentInChildren<CanvasGroup>(true);
+
+            if (menuCanvasGroup == null)
+            {
+                throw new System.Exception("You must have a CanvasGroup component");
+            }
+            
             CaptureManager.Initialize();
             
             eraseTab.onTabSelected.AddListener(() => 
@@ -152,7 +183,30 @@ namespace Komodo.Runtime
                     instructorOnlyMenu.SetActive(true);
                 }
             });
+
+            closeButton.onClick.AddListener(() => ToggleVisibility(false));
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+            developerTab.gameObject.SetActive(false);
+#endif
+        }
+
+        public void ToggleVisibility(bool isVisible)
+        {
+            if (menuCanvasGroup == null) {
+                Debug.LogWarning("Tried to toggle visibility for menuCanvasGroup, but it was null. Skipping.");
+
+                return;
+            }
             
+            menuCanvasGroup.blocksRaycasts = isVisible;
+            collapsedMenu.SetActive(!isVisible);
+            expandedMenu.SetActive(isVisible);
+        }
+
+        public void ToggleVisibility()
+        {
+            ToggleVisibility(!menuCanvasGroup.blocksRaycasts);
         }
 
         // As of Komodo v0.3.2, UIManager does not have a public IsRightHanded function, so we must make do with this workaround. Returns a MenuAnchor.Location value, including UNKNOWN if the parent is not a MenuAnchor.
@@ -169,6 +223,23 @@ namespace Komodo.Runtime
         public void OnDestroy() 
         {
             CaptureManager.Deinitialize();
+        }
+
+        public bool GetVisibility()
+        {
+            return menuCanvasGroup.blocksRaycasts;
+        }
+
+        public void ChangeHintsToDesktopMode()
+        {
+            openButtonDesktopHint?.SetActive(true);
+            openButtonXRHint?.SetActive(false);
+        }
+
+        public void ChangeHintsToXRMode()
+        {
+            openButtonDesktopHint?.SetActive(false);
+            openButtonXRHint?.SetActive(true);
         }
     }
 }

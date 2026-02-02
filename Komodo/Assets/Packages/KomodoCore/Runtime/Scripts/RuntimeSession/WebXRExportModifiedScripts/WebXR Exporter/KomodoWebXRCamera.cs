@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Runtime.InteropServices;
+using UnityEngine.Serialization;
 using UnityEngine.XR;
 using WebXR;
 
@@ -21,7 +22,8 @@ namespace Komodo.Runtime
             RightAR
         }
 
-        public Camera cameraMain, cameraMainEditor, cameraL, cameraR, cameraARL, cameraARR;
+        [FormerlySerializedAs("cameraMain")] public Camera cameraSpectator;
+        public Camera cameraMainEditor, cameraL, cameraR, cameraARL, cameraARR;
         private WebXRState xrState = WebXRState.NORMAL;
         private Rect leftRect, rightRect;
         private int viewsCount = 1;
@@ -36,8 +38,6 @@ namespace Komodo.Runtime
 #endif
 
             WebXRManager.OnHeadsetUpdate += onHeadsetUpdate;
-
-            cameraMain.transform.localPosition = new Vector3(0, 0, 0);
         }
 
         private void OnDisable()
@@ -65,7 +65,7 @@ namespace Komodo.Runtime
                     return cameraARR;
             }
 #if UNITY_WEBGL && !UNITY_EDITOR
-            return cameraMain;
+            return cameraSpectator;
 #else 
             return cameraMainEditor;
 #endif
@@ -83,10 +83,10 @@ namespace Komodo.Runtime
 #if UNITY_WEBGL && !UNITY_EDITOR
                 //set complete camera gameobject to false to prevent update calls from freeflight controller
                 cameraMainEditor.gameObject.SetActive(false);
-                cameraMain.gameObject.SetActive(false);
+                cameraSpectator.gameObject.SetActive(false);
 #else 
                 cameraMainEditor.gameObject.SetActive(true);
-                cameraMain.gameObject.SetActive(false);
+                cameraSpectator.gameObject.SetActive(false);
 #endif
 
                 cameraL.enabled = viewsCount > 0;
@@ -99,7 +99,7 @@ namespace Komodo.Runtime
             }
             else if (xrState == WebXRState.AR)
             {
-                cameraMain.gameObject.SetActive(false);
+                cameraSpectator.gameObject.SetActive(false);
 
                 cameraL.enabled = false;
                 cameraR.enabled = false;
@@ -112,7 +112,7 @@ namespace Komodo.Runtime
             else if (xrState == WebXRState.NORMAL)
             {
                 cameraMainEditor.gameObject.SetActive(false);
-                cameraMain.gameObject.SetActive(true);
+                cameraSpectator.gameObject.SetActive(true);
 
                 cameraL.enabled = false;
                 cameraR.enabled = false;

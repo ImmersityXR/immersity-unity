@@ -1,10 +1,12 @@
 ﻿//#define TESTING_BEFORE_BUILDING
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using WebXR;
 using Komodo.Utilities;
 using System.Collections.Generic;
+using UnityEngine.XR.Management;
 
 namespace Komodo.Runtime
 {
@@ -16,7 +18,7 @@ namespace Komodo.Runtime
             get { return ((EventSystemManager)_Instance); }
             set { _Instance = value; }
         }
-
+        
         //we use cameras for our lazer selection to use Unity Eventsystem
          public TriggerEventInputSource inputSource_LeftHand;
          public TriggerEventInputSource inputSource_RighttHand;
@@ -54,18 +56,18 @@ namespace Komodo.Runtime
                 Debug.LogError("We are missing xREventsystem (EventSystemRayCastCameras.cs", gameObject);
         }
 
-        //public void Start()
-        //{
-        //    ////check if we have a menu available in our UIManager
-        //    //if (UIManager.Instance.menuCanvas != null)
-        //    //{
-        //    //    //if we have one add it to the last canvas array index
-        //    //    canvasesToReceiveEvents[canvasesToReceiveEvents.Length - 1] = UIManager.Instance.menuCanvas;
-
-
-        //    //}
-        //  //  xrStandaloneInput.gameObject.SetActive(false);
-        //}
+        private IEnumerator StartXRLoader()
+        {
+            yield return XRGeneralSettings.Instance.Manager.InitializeLoader();
+            
+            if (XRGeneralSettings.Instance.Manager.activeLoader == null) 
+            {
+                Debug.Log("No XR Loader was selected.");
+            } else
+            {
+                XRGeneralSettings.Instance.Manager.StartSubsystems(); 
+            }
+        }
 
         public WebXRState GetXRCurrentState()
         {
@@ -79,30 +81,29 @@ namespace Komodo.Runtime
 
         private void onXRChange(WebXRState state, int viewsCount, Rect leftRect, Rect rightRect)
         {
-
-            if (state == WebXRState.VR)
-            {
-                SetToXR();
-            }
-            else if (state == WebXRState.NORMAL)
+            if (state == WebXRState.NORMAL) 
             {
                 SetToDesktop();
+                return;
             }
-
+            
+            // state == WebXRState.VR)
+            SetToXR();
         }
 
-        [ContextMenu("Set to Desktop")]
         public void SetToDesktop()
         {
+            XRGeneralSettings.Instance.Manager.StopSubsystems();
+            XRGeneralSettings.Instance.Manager.DeinitializeLoader();
             GetComponent<ToggleMenuDisplayMode>().SetDesktopViewport();
             //turn on and off appropriate eventsystem to handle appropriate input
             desktopStandaloneInput.gameObject.SetActive(true);
             xrStandaloneInput.gameObject.SetActive(false);
         }
 
-        [ContextMenu("Set to XR")]
         public void SetToXR()
         {
+            StartCoroutine(StartXRLoader());
             GetComponent<ToggleMenuDisplayMode>().SetVRViewPort();
             desktopStandaloneInput.gameObject.SetActive(false);
             xrStandaloneInput.gameObject.SetActive(true);
@@ -212,5 +213,9 @@ namespace Komodo.Runtime
 
         }
 
+        public void OnApplicationQuit() 
+        {
+            XRGeneralSettings.Instance.Manager.DeinitializeLoader();
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Komodo.Runtime
@@ -17,6 +18,11 @@ namespace Komodo.Runtime
         public Sprite tabHoverActive;
 
         private TabButton _selectedTab;
+
+        private bool _hideTabBarOnSelect =>
+            Resources.FindObjectsOfTypeAll<FontSizeAdjuster>()?.FirstOrDefault().IsLargeFormat ?? false;
+        
+        [SerializeField] private GameObject tabBar;
 
         public void Awake ()
         {
@@ -71,6 +77,8 @@ namespace Komodo.Runtime
                 _selectedTab.Deselect();
 
                 _selectedTab = null;
+                
+                ShowTabBar();
 
                 ResetTabs();
 
@@ -86,6 +94,21 @@ namespace Komodo.Runtime
             ResetTabs();
 
             tab.background.sprite = tabActive; 
+
+            if (_hideTabBarOnSelect)
+            {
+                HideTabBar();
+            }
+        }
+
+        public void HideTabBar()
+        {
+            tabBar.SetActive(false);
+        }
+
+        public void ShowTabBar()
+        {
+            tabBar.SetActive(true);
         }
 
         public void ResetTabs ()

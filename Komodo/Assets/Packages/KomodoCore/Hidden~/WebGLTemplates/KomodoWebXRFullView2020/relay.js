@@ -128,7 +128,7 @@ var playback_id = Number(params.playback);
 // ... build may differ at runtime for admin and instructor users
 var details = {
     assets: [],
-    build: "",
+    app_and_build: "",
     course_id: 0,
     create_at: "",
     description: "",
@@ -150,7 +150,7 @@ request.onload = function() {
     let res = request.response;
 
     // session details
-    details.build = runtimeAppAndBuild;
+    details.app_and_build = runtimeAppAndBuild;
     details.course_id = res.course_id;
     details.create_at = res.create_at;
     details.description = res.description;

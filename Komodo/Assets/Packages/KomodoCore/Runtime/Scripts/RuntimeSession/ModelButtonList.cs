@@ -38,30 +38,23 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Komodo.AssetImport;
+using UnityEngine.Serialization;
 
 namespace Komodo.Runtime
 {
     public class ModelButtonList : ButtonList
     {
-        public ModelDataTemplate modelData;
+        [FormerlySerializedAs("modelData")] public SessionDataTemplate sessionData;
 
         private EntityManager entityManager;
+        public GameObject buttonTemplate;
+        public Transform transformToPlaceButtonUnder;
 
-        public override IEnumerator Start()
+        public bool IsReady { get; private set; }
+
+        public IEnumerator Start()
         {
             entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-
-            //check if we should set up models
-            if (!ModelImportInitializer.IsAlive)
-            {
-                gameObject.SetActive(false);
-
-                yield break;
-            }
-            else
-            {
-                gameObject.SetActive(true);
-            }
 
             yield return new WaitUntil(() => GameStateManager.Instance.isAssetImportFinished);
 
@@ -70,58 +63,50 @@ namespace Komodo.Runtime
             NotifyIsReady();
         }
 
-        protected override void InitializeButtons()
+        protected void InitializeButtons()
         {
             if (!transformToPlaceButtonUnder)
             {
                 transformToPlaceButtonUnder = transform;
             }
 
-            if (!modelData)
+            if (!sessionData)
             {
                 throw new UnassignedReferenceException("modelData on ModelButtonList");
             }
 
-            if (modelData.models == null)
+            if (sessionData.models == null)
             {
                 throw new System.Exception("expected modelData to have models, but it was null");
             }
 
-            for (int i = 0; i < modelData.models.Count; i++)
+            for (int i = 0; i < sessionData.models.Count; i++)
             {
-                if (UIManager.IsAlive)
+                GameObject item = Instantiate(buttonTemplate, transformToPlaceButtonUnder);
+
+                if (item.TryGetComponent(out ModelItem modelItem))
                 {
-                    GameObject item = Instantiate(buttonTemplate, transformToPlaceButtonUnder);
+                    string name = sessionData.models[i].name;
 
-                    if (item.TryGetComponent(out ModelItem modelItem))
+                    if (name == null)
                     {
-                        string name = modelData.models[i].name;
+                        Debug.LogError($"modelData.models[{i}].name was null. Proceeding anyways.");
 
-                        if (name == null)
-                        {
-                            Debug.LogError($"modelData.models[{i}].name was null. Proceeding anyways.");
-
-                            name = "null";
-                        }
-
-                        modelItem.Initialize(i, modelData.models[i].name);
+                        name = "null";
                     }
-                    else
-                    {
-                        throw new MissingComponentException("modelItem on GameObject (from ModelButtonTemplate)");
-                    }
+
+                    modelItem.Initialize(i, sessionData.models[i].name);
+                }
+                else
+                {
+                    throw new MissingComponentException("modelItem on GameObject (from ModelButtonTemplate)");
                 }
             }
         }
 
-        protected override void NotifyIsReady()
+        protected void NotifyIsReady()
         {
-            base.NotifyIsReady();
-
-            if (UIManager.IsAlive)
-            {
-                UIManager.Instance.isModelButtonListReady = true;
-            }
+            IsReady = true;
         }
     }
 }

@@ -44,33 +44,7 @@ namespace Komodo.Runtime
     public class ButtonList : MonoBehaviour
     {
         //define the prefab to use to generate our list of buttons
-        public GameObject buttonTemplate;
 
         //define were to place our generated buttons under
-        public Transform transformToPlaceButtonUnder;
-
-        private EntityManager entityManager;
-        public virtual IEnumerator Start()
-        {
-            entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-
-            InitializeButtons();
-
-            NotifyIsReady();
-
-            yield return null;
-
-        }
-
-        protected virtual void InitializeButtons()
-        {
-
-        }
-
-        protected virtual void NotifyIsReady()
-        {
-
-        }
-
     }
 }
