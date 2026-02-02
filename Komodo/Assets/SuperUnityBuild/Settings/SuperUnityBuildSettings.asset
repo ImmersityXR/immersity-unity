@@ -41,11 +41,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _basicSettings:
     baseBuildFolder: Builds
-    buildPath: $RELEASE_TYPE/$VERSION-$BUILD-$YEAR$_MONTH_$DAY_$TIME
+    buildPath: $RELEASE_TYPE/$VERSION-$BUILD-$YEAR_$MONTH_$DAY_$TIME
     openFolderPostBuild: 1
     constantsFileLocation: Assets\SuperUnityBuild
   _productParameters:
-    buildCounter: 2
+    buildCounter: 5
     buildVersion: 1.0.0.2
     versionTemplate: 1.0.0.$BUILD
     autoGenerate: 1
