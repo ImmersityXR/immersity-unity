@@ -86,7 +86,7 @@ namespace Komodo.Runtime
         private IEnumerator Start()
         {
             //WebGLMemoryStats.LogMoreStats("ModelImportInitializer.Start Setup BEFORE");
-
+            
             if (loader == null) {
                 throw new System.Exception("Missing loader");
             }

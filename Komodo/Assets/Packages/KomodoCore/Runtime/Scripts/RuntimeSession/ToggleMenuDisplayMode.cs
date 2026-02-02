@@ -28,6 +28,8 @@ public class ToggleMenuDisplayMode : MonoBehaviour
         WebXRManagerEditorSimulator.OnXRChange += ToggleMode;
 #endif
         uiManager = UIManager.Instance;
+        
+        SetDesktopViewport();
     }
 
     private void ToggleMode(WebXRState state, int viewsCount, Rect leftRect, Rect rightRect)
@@ -42,33 +44,20 @@ public class ToggleMenuDisplayMode : MonoBehaviour
         }
     }
 
-    [ContextMenu("Set to VR Mode")]
-    public void SetVRViewPort() {
-
+    [ContextMenu("Set Menu to VR Mode")]
+    public void SetVRViewPort()
+    {
         if (!UIManager.IsAlive)
         {
             Debug.LogWarning("UIManager is not alive; called by SetVRViewPort()");
             return;
 
         }
-        uiManager.EnableCursor();
-        //TODO: One of the above actually does the job. Which is it?
 
-        uiManager.PlaceMenuOnCurrentHand();
-
-        uiManager.ConvertMenuToAlwaysExpanded();
-
-        uiManager.EnableCreateMenu(true);
-
-        uiManager.HeightCalibrationButtonsSettings(true);
-
-        uiManager.EnableInstructorMenuButton(false);
-
-        uiManager.EnableIgnoreLayoutForVRmode(false);
-
+        uiManager.SetMenuToVRMode();
     }
 
-    [ContextMenu("Set to Desktop Mode")]
+    [ContextMenu("Set Menu to Desktop Mode")]
     public void SetDesktopViewport()
     {
         if (!UIManager.IsAlive)

@@ -102,11 +102,6 @@ namespace Komodo.Runtime
                 Debug.LogWarning("Tried to process session state for lock and visibility, but there was no UIManager.");
             }
 
-            if (!SceneManagerExtensions.IsAlive)
-            {
-                Debug.LogWarning("Tried to process session state for scene, but there was no SceneManagerExtensions.");
-            }
-
             if (!ClientSpawnManager.IsAlive)
             {
                 Debug.LogWarning("Tried to process session state for clients, but there was no ClientSpawnManager.");
@@ -118,8 +113,6 @@ namespace Komodo.Runtime
 
                 return;
             }
-
-            SceneManagerExtensions.Instance.SelectScene(_state.scene);
 
             ClientSpawnManager.Instance.AddNewClients(_state.clients);
 

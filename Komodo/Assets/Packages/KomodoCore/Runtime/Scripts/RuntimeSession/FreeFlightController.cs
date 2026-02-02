@@ -18,7 +18,7 @@ namespace Komodo.Runtime
         [Tooltip("Rotation sensitivity")]
         public float rotationSensitivity = 3f;
 
-        public bool naturalRotationDirection = true;
+        public bool naturalRotationDirection;
 
         [Tooltip("Enable/disable translation control. For use in Unity editor only.")]
         public bool translationEnabled = true;
@@ -60,7 +60,6 @@ namespace Komodo.Runtime
 
         private float minimumY = -90f;
         private float maximumY = 90f;
-
 
         //to check on ui over objects to disable mouse drag while clicking buttons
         private StandaloneDesktopInputModule standaloneInputModule_Desktop;
@@ -118,21 +117,50 @@ namespace Komodo.Runtime
             GameStateManager.Instance.RegisterUpdatableObject(this);
 
             //teleportPlayer.BeginPlayerHeightCalibration(left hand? right hand?); //TODO turn back on and ask for handedness 
+
+            SetToDesktop();
         }
 
-
+        private bool isFocused;
         public void OnUpdate(float deltaTime)
         {
+            if (Input.GetKeyUp(KeyCode.Escape))
+            {
+                if (UIManager.Instance.GetMenuVisibility())
+                {
+                    UIManager.Instance.ToggleMenuVisibility(false);
+                }
+                else
+                {
+                    isFocused = false;
+                }
+            }
+            
+            if (Input.GetKeyUp(KeyCode.Tab))
+            {
+                UIManager.Instance.ToggleMenuVisibility();
+            }
+
+            if (Input.GetMouseButton(0))
+            {
+                isFocused = true;
+            }
+
+            if (isFocused && !UIManager.Instance.GetMenuVisibility())
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+            }
+            
             if (translationEnabled)
             {
                 MovePlayerFromInput();
             }
 
-            if (IsMouseInteractingWithMenu()) {
-                return;
-            }
-
-            if ((rotationEnabled && Input.GetMouseButton(0)) || (rotationEnabled && Input.GetMouseButton(1)))
+            if (Cursor.lockState == CursorLockMode.Locked)
             {
                 RotatePlayerFromInput();
             }
@@ -158,34 +186,43 @@ namespace Komodo.Runtime
         {
             if (state == WebXRState.VR)
             {
-                GameStateManager.Instance.DeRegisterUpdatableObject(this);
-                //isUpdating = false;
+                SetToVR();
+            }
+            else if(state == WebXRState.NORMAL)
+            {
+                SetToDesktop();
+            }
+        }
 
-                //Reset the XR rotation of our VR Cameras to avoid leaving weird rotations from desktop mode
-                curRotationX = 0f;
+        private void SetToDesktop()
+        {
+            //commented to avoid setting rotation back on which causes rotational issues when switching cameras
+            //  EnableAccordingToPlatform();
+
+            //set desktop camera the same as the xr camera on xr exit
+            curRotationX = 0f;
+
+            desktopCamera.position = playspace.position;
+
+            desktopCamera.localRotation = Quaternion.Euler(new Vector3(0, curRotationY, 0));
+
+            SyncXRWithSpectator();
+
+            GameStateManager.Instance.RegisterUpdatableObject(this);
+            // isUpdating = true;
+        }
+
+        private void SetToVR()
+        {
+            GameStateManager.Instance.DeRegisterUpdatableObject(this);
+            //isUpdating = false;
+
+            //Reset the XR rotation of our VR Cameras to avoid leaving weird rotations from desktop mode
+            curRotationX = 0f;
 
             var result = Quaternion.Euler(new Vector3(0, curRotationY, 0));
 
             teleportPlayer.SetXRAndSpectatorRotation(result);
-
-            }
-            else if(state == WebXRState.NORMAL)
-            {
-                //commented to avoid setting rotation back on which causes rotational issues when switching cameras
-                //  EnableAccordingToPlatform();
-
-                //set desktop camera the same as the xr camera on xr exit
-                curRotationX = 0f;
-
-                desktopCamera.position = playspace.position;
-
-                desktopCamera.localRotation = Quaternion.Euler(new Vector3(0, curRotationY, 0));
-
-                SyncXRWithSpectator();
-
-                GameStateManager.Instance.RegisterUpdatableObject(this);
-               // isUpdating = true;
-            }
         }
 
         /// <summary>

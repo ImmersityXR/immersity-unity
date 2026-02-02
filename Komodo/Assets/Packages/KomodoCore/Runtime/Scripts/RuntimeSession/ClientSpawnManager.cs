@@ -162,10 +162,8 @@ namespace Komodo.Runtime
 
             if (UIManager.IsAlive)
             {
-                yield return new WaitUntil(() => UIManager.Instance.IsReady()); //TODO(Brandon): prevent a failed menu from stopping the whole client
+                usernamesListController = UIManager.Instance.usernamesListController;
             }
-            
-            usernamesListController = UIManager.Instance.usernamesListController;
 
             //yield return new WaitUntil(() => SessionStateManager.Instance.IsReady()); TODO(Brandon): fully remove this line if it's working
 
