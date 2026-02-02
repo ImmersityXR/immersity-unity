@@ -33,6 +33,8 @@ namespace Komodo.Runtime
 
         public Button instructorMenuButton;
 
+        public DevelopmentManager developmentManager;
+
         void OnValidate ()
         {
             if (eraseTab == null)

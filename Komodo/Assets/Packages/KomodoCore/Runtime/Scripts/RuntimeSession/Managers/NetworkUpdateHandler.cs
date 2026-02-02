@@ -41,11 +41,19 @@ using System.Collections.Generic;
 using Unity.Entities;
 using Komodo.AssetImport;
 using Komodo.Utilities;
+using UnityEngine.Serialization;
 
 namespace Komodo.Runtime
 {
     [System.Serializable]
     public class Int_UnityEvent : UnityEvent<int> { }
+    
+    [System.Serializable]
+    enum SessionDetailsSource {
+        SOCKET_IO_JSLIB = 0, // Read from relay.js file's initialization of the window.details object.
+        SESSION_DATA_FILE = 1, // Read from manually edited Unity file.
+        SOCKET_IO_SIMULATOR = 2, // Read from hardcoded value in SocketIOClientSimulator.cs.
+    } 
 
     //We use interfaces to centralize our update calls and optimize crossing between manage and native code see GameStateManager.cs
     public class NetworkUpdateHandler : SingletonComponent<NetworkUpdateHandler>, IUpdatable
@@ -59,13 +67,26 @@ namespace Komodo.Runtime
 #if UNITY_WEBGL && !UNITY_EDITOR 
         // don't declare a socket simulator for WebGL build
 #else
-        private SocketIOEditorSimulator SocketSim;
+        private SocketIOClientSimulator SocketSim;
 #endif
+        
+        private SessionDetailsSource sessionDetailsSource;
 
         // session id from JS
         [HideInInspector] public int session_id;
-        [HideInInspector] public string sessionName;
-        [HideInInspector] public string buildName;
+
+        [HideInInspector]
+        public string SessionName
+        {
+            get => sessionData.session_name;
+            private set => sessionData.session_name = value;
+        }
+
+        [HideInInspector] public string AppAndBuildName
+        {
+            get => sessionData.app_and_build;
+            private set => sessionData.app_and_build = value;
+        }
 
         // client_id from JS
         [HideInInspector] public int client_id;
@@ -73,9 +94,13 @@ namespace Komodo.Runtime
         // is the current client a teacher? from JS
         public int isTeacher;
 
-        public ModelDataTemplate modelData;
+        [FormerlySerializedAs("modelData")] public SessionDataTemplate sessionData;
 
-        public bool useEditorModelsList = false;
+        /// <summary>
+        /// Use Editor Session Data: set to true to read from local hardcoded values (see SessionDetailsSource).
+        /// Set to false to read from live server values.
+        /// </summary>
+        [FormerlySerializedAs("useEditorModelsList")] public bool useEditorSessionData = false;
 
         public Text socketIODisplay;
 
@@ -151,10 +176,10 @@ namespace Komodo.Runtime
 #if UNITY_WEBGL && !UNITY_EDITOR 
             //don't assign a SocketIO Simulator for WebGL build
 #else
-            SocketSim = SocketIOEditorSimulator.Instance;
+            SocketSim = SocketIOClientSimulator.Instance;
             if (!SocketSim)
             {
-                Debug.LogWarning("No SocketIOEditorSimulator was found in the scene. In-editor behavior may not be as expected.");
+                Debug.LogWarning("No SocketIOClientSimulator was found in the scene. In-editor behavior may not be as expected.");
             }
 #endif
         }
@@ -174,63 +199,60 @@ namespace Komodo.Runtime
 
         private void _GetModelsAndSessionDetails ()
         {
-            string SessionDetailsString;
-#if UNITY_WEBGL && !UNITY_EDITOR 
-
-            if (useEditorModelsList) 
+            
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (useEditorSessionData) 
             {
-#if DEVELOPMENT_BUILD
-                //in dev builds, don't clear models list
-                Debug.LogWarning("Using editor's model list. You should turn off 'Use Editor Models List' off in NetworkManager.");
+                Debug.Log("In Unity Editor or development build. Using SessionData file.");
+                sessionDetailsSource = SessionDetailsSource.SESSION_DATA_FILE;
+            }
+            else
+            {
+                Debug.Log("In Unity Editor or development build. Using SocketIO Simulator.");
+                sessionDetailsSource = SessionDetailsSource.SOCKET_IO_SIMULATOR;
+            }
 #else
-                //in non-dev build, ignore the flag. 
-                modelData.models.Clear();
+            Debug.Log("In WebGL and/or release build. Using SocketIO JS Lib (live server).");
+            sessionDetailsSource = SessionDetailsSource.SOCKET_IO_JSLIB;
 #endif
-                SessionDetailsString = SocketIOEditorSimulator.GetSessionDetails();
-
-            }
-            else 
+            
+            string sessionDetailsString = "";
+            switch (sessionDetailsSource) 
             {
-                modelData.models.Clear();
-
-                SessionDetailsString = SocketIOJSLib.GetSessionDetails();
+                case SessionDetailsSource.SOCKET_IO_JSLIB:
+                    sessionData.models.Clear();
+                    sessionDetailsString = SocketIOJSLib.GetSessionDetails();
+                    break;
+                case SessionDetailsSource.SOCKET_IO_SIMULATOR:
+                    sessionData.models.Clear();
+                    sessionDetailsString = SocketIOClientSimulator.GetSessionDetails();
+                    break;
+                case SessionDetailsSource.SESSION_DATA_FILE:
+                    //models will be autopopulated from sessionData object
+                    return;
             }
-
-            if (System.String.IsNullOrEmpty(SessionDetailsString)) 
+            
+            if (String.IsNullOrEmpty(sessionDetailsString)) 
             {
-                Debug.Log("Error: Details are null or empty.");
+                Debug.LogError("Session Details are null or empty.");
+                return;
             } 
-            else 
+            
+            Debug.Log("SessionDetails: " + sessionDetailsString);
+            SessionDetails details = JsonUtility.FromJson<SessionDetails>(sessionDetailsString);
+            
+            switch (sessionDetailsSource) 
             {
-                Debug.Log("SessionDetails: " + SessionDetailsString);
-                var details = JsonUtility.FromJson<SessionDetails>(SessionDetailsString);
-                
-                if (useEditorModelsList) 
-                {
-#if DEVELOPMENT_BUILD
-                    //in dev builds, don't pass details to the models list if the flag is enabled.
-                    Debug.LogWarning("Using editor's model list. You should turn off 'Use Editor Models List' off in NetworkManager.");
-#else
-                    //in non-dev build, ignore the flag. 
-                    modelData.models = details.assets;
-#endif
-                }
-                else 
-                {
-                    modelData.models = details.assets;
-                }
-
-                if (sessionName != null)
-                {
-                    sessionName = details.session_name;
-                    buildName = details.build;
-                }
-                else
-                {
-                    Debug.LogError("SessionName Ref in NetworkUpdateHandler's Text Component is missing from editor");
-                }
+                case SessionDetailsSource.SOCKET_IO_JSLIB:
+                case SessionDetailsSource.SOCKET_IO_SIMULATOR:
+                    sessionData.models = details.assets;
+                    SessionName = details.session_name;
+                    AppAndBuildName = details.app_and_build;
+                    break;
+                case SessionDetailsSource.SESSION_DATA_FILE:
+                    Debug.LogWarning("Using editor's session data. If you want to use the SocketIO JS Lib or Simulator, you should change the setting for SessionDataSource in NetworkManager.");
+                    break;
             }
-#endif
         }
 
         public void Awake()
@@ -246,7 +268,7 @@ namespace Komodo.Runtime
 
             //WebGLMemoryStats.LogMoreStats("NetworkUpdateHandler.Awake BEFORE");
 
-            if (modelData == null) {
+            if (sessionData == null) {
                 Debug.LogWarning("No model data template was found for NetworkManager. Imported models may use editor template.");
             }
 
@@ -390,28 +412,6 @@ namespace Komodo.Runtime
         public void OnUpdate(float realTime)
         {
             _Tick();
-        }
-
-        public string GetPlayerNameFromClientID(int clientID)
-        {
-#if UNITY_WEBGL && !UNITY_EDITOR 
-            string SessionDetailsString = SocketIOJSLib.GetSessionDetails();
-#else
-            string SessionDetailsString = SocketIOEditorSimulator.GetSessionDetails();
-#endif
-            var Details = JsonUtility.FromJson<SessionDetails>(SessionDetailsString);
-
-            foreach (User user in Details.users)
-            {
-                if (clientID != user.student_id)
-                {
-                    continue;
-                }
-
-                return user.first_name + "  " + user.last_name;
-            }
-
-            return "Client " + clientID;
         }
 
         // Use the inspector to call this method.

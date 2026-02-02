@@ -31,11 +31,11 @@ namespace Komodo.Runtime
 #if UNITY_WEBGL && !UNITY_EDITOR
             SocketIOJSLib.BrowserEmitMessage(this.type, this.data);
 #else
-            var socketSim = SocketIOEditorSimulator.Instance;
+            var socketSim = SocketIOClientSimulator.Instance;
 
             if (!socketSim)
             {
-                Debug.LogWarning("No SocketIOEditorSimulator found");
+                Debug.LogWarning("No SocketIOClientSimulator found");
             }
 
             socketSim.BrowserEmitMessage(this.type, this.data);

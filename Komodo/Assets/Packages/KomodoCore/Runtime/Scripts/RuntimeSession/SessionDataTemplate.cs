@@ -33,34 +33,45 @@
 
 
 using System.Collections.Generic;
+using Komodo.AssetImport;
 using UnityEngine;
 
-namespace Komodo.AssetImport
+namespace Komodo.Runtime
 {
     /// <summary>
-    /// Used for creating an model through Unity project context that is used to store the models that we want to 
-    /// download in the begining through ClientSpawnManager.
+    /// Store session metadata, a list of user metadata, and a list of 3D model metadata.
     /// </summary>
-    [CreateAssetMenu(fileName = "ModelDataTemplate", menuName = "ModelDataTemplate", order = 0)]
-    public class ModelDataTemplate : ScriptableObject
+    [CreateAssetMenu(fileName = "SessionData", menuName = "Session Data", order = 0)]
+    public class SessionDataTemplate : ScriptableObject
     {
+        public int course_id;
+        public string create_at;
+        public string description;
+        public string start_time;
+        public string end_time;
+        
+        public string app_and_build;
+        public int session_id;
+        public string session_name;
+        
+        public List<User> users;
+        
         //list our data objects to import
         public List<ModelImportData> models;
 
-        [System.Serializable]
-        public struct ModelImportData
-    
+        public string GetPlayerNameFromClientID(int clientID)
         {
-            public string name;
-            public int id;
-            public string url;
+            foreach (User user in users)
+            {
+                if (clientID != user.student_id)
+                {
+                    continue;
+                }
 
-            public float scale;
-            public Vector3 position;
-            public Vector3 euler_rotation;
+                return user.first_name + "  " + user.last_name;
+            }
 
-            public bool isWholeObject;
+            return "User " + clientID;
         }
-
     }
 }
