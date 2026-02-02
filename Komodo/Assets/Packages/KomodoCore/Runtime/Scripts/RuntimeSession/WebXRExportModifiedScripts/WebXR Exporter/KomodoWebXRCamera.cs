@@ -44,6 +44,11 @@ namespace Komodo.Runtime
         {
 
         }
+
+        public void Start()
+        {
+            SetToDesktop();
+        }
         
         public void OnDestroy()
         {
@@ -80,46 +85,61 @@ namespace Komodo.Runtime
 
             if (xrState == WebXRState.VR)
             {
+                SetToVR(viewsCount, leftRect, rightRect);
+            }
+            else if (xrState == WebXRState.AR)
+            {
+                SetToAR(viewsCount, leftRect, rightRect);
+            }
+            else if (xrState == WebXRState.NORMAL)
+            {
+                SetToDesktop();
+            }
+        }
+
+        private void SetToDesktop()
+        {
+            cameraMainEditor.gameObject.SetActive(false);
+            cameraSpectator.gameObject.SetActive(true);
+
+            cameraL.enabled = false;
+            cameraR.enabled = false;
+
+            cameraARL.enabled = false;
+            cameraARR.enabled = false;
+        }
+
+        private void SetToAR(int viewsCount, Rect leftRect, Rect rightRect)
+        {
+            cameraSpectator.gameObject.SetActive(false);
+
+            cameraL.enabled = false;
+            cameraR.enabled = false;
+
+            cameraARL.enabled = viewsCount > 0;
+            cameraARL.rect = leftRect;
+            cameraARR.enabled = viewsCount > 1;
+            cameraARR.rect = rightRect;
+        }
+
+        private void SetToVR(int viewsCount, Rect leftRect, Rect rightRect)
+        {
 #if UNITY_WEBGL && !UNITY_EDITOR
                 //set complete camera gameobject to false to prevent update calls from freeflight controller
                 cameraMainEditor.gameObject.SetActive(false);
                 cameraSpectator.gameObject.SetActive(false);
 #else 
-                cameraMainEditor.gameObject.SetActive(true);
-                cameraSpectator.gameObject.SetActive(false);
+            cameraMainEditor.gameObject.SetActive(true);
+            cameraSpectator.gameObject.SetActive(false);
 #endif
 
-                cameraL.enabled = viewsCount > 0;
-                cameraL.rect = leftRect;
-                cameraR.enabled = viewsCount > 1;
-                cameraR.rect = rightRect;
+            cameraL.enabled = viewsCount > 0;
+            cameraL.rect = leftRect;
+            cameraR.enabled = viewsCount > 1;
+            cameraR.rect = rightRect;
 
-                cameraARL.enabled = false;
-                cameraARR.enabled = false;
-            }
-            else if (xrState == WebXRState.AR)
-            {
-                cameraSpectator.gameObject.SetActive(false);
-
-                cameraL.enabled = false;
-                cameraR.enabled = false;
-
-                cameraARL.enabled = viewsCount > 0;
-                cameraARL.rect = leftRect;
-                cameraARR.enabled = viewsCount > 1;
-                cameraARR.rect = rightRect;
-            }
-            else if (xrState == WebXRState.NORMAL)
-            {
-                cameraMainEditor.gameObject.SetActive(false);
-                cameraSpectator.gameObject.SetActive(true);
-
-                cameraL.enabled = false;
-                cameraR.enabled = false;
-
-                cameraARL.enabled = false;
-                cameraARR.enabled = false;
-            }
+            cameraARL.enabled = false;
+            cameraARR.enabled = false;
         }
 
         private void onHeadsetUpdate(
