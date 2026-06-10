@@ -67,6 +67,34 @@ var getParams = function (url) {
 
 var params = getParams(window.location.href);
 
+// Forward the page's `auth` URL parameter to the relay server with every
+// socket.io connection. The relay can be configured to require this shared
+// secret (config.auth.clientSecret in komodo-relay) and rejects connections
+// without it. The Unity build connects through the global `io`, which is
+// created in socket-funcs.jslib and cannot read page parameters, so wrap
+// `io` here instead — this also covers already-built clients, since this
+// file can be edited inside a build folder without rebuilding.
+(function () {
+    if (!params.auth || typeof io === 'undefined') {
+        return;
+    }
+
+    var originalIo = io;
+
+    io = function (url, opts) {
+        if (typeof url === 'string') {
+            url += (url.indexOf('?') === -1 ? '?' : '&') + 'auth=' + encodeURIComponent(params.auth);
+        }
+
+        return originalIo(url, opts);
+    };
+
+    // preserve properties like io.protocol and io.Manager
+    for (var key in originalIo) {
+        io[key] = originalIo[key];
+    }
+})();
+
 // Removes everything after the "?" in the input string.
 var removeQuery = function (url) {
     var splitUrl = url.split("?");
