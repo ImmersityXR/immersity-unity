@@ -73,19 +73,53 @@ var params = getParams(window.location.href);
 // created in socket-funcs.jslib and cannot read page parameters, so wrap
 // `io` here instead — this also covers already-built clients, since this
 // file can be edited inside a build folder without rebuilding.
+// Additionally, keep the Unity jslib's Socket.IO 2.x event names working
+// against the bundled Socket.IO 4.x client: in 4.x the reconnection
+// lifecycle events moved from the Socket to the Manager (socket.io.on(...)),
+// 'reconnecting' was renamed 'reconnect_attempt', and 'connect_timeout' was
+// removed (its failure cases surface as 'connect_error', which the jslib
+// already listens for). Redirecting listener registration here means
+// already-built clients keep working without a Unity rebuild.
 (function () {
-    if (!params.auth || typeof io === 'undefined') {
+    if (typeof io === 'undefined') {
         return;
     }
+
+    var MANAGER_EVENTS = {
+        reconnect: 'reconnect',
+        reconnect_attempt: 'reconnect_attempt',
+        reconnecting: 'reconnect_attempt',
+        reconnect_error: 'reconnect_error',
+        reconnect_failed: 'reconnect_failed',
+        error: 'error'
+    };
 
     var originalIo = io;
 
     io = function (url, opts) {
-        if (typeof url === 'string') {
+        if (typeof url === 'string' && params.auth) {
             url += (url.indexOf('?') === -1 ? '?' : '&') + 'auth=' + encodeURIComponent(params.auth);
         }
 
-        return originalIo(url, opts);
+        var socket = originalIo(url, opts);
+
+        var originalOn = socket.on.bind(socket);
+
+        socket.on = function (event, listener) {
+            if (MANAGER_EVENTS[event]) {
+                socket.io.on(MANAGER_EVENTS[event], listener);
+
+                return socket;
+            }
+
+            if (event === 'connect_timeout') {
+                return socket;
+            }
+
+            return originalOn(event, listener);
+        };
+
+        return socket;
     };
 
     // preserve properties like io.protocol and io.Manager
