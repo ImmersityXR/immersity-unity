@@ -8,9 +8,11 @@ in the Unity editor.
 - Client: https://github.com/davtamay/KomodoSandbox (`webrtc.js`,
   `webrtcUnity.jslib`, `WebRTCVideoTexture.cs`, Jan–Apr 2024)
 - Original signaling server: https://github.com/davtamay/RelayTesting
-- The signaling server has been re-ported into immersity-relay as a
+- The signaling server has been re-ported into the relay
+  (`services/relay/` in
+  [immersityxr-core](https://github.com/ImmersityXR/immersityxr-core)) as a
   dedicated `/rtc` namespace (`rtc.js`), Socket.IO 2.x, per-session rooms,
-  shared-secret auth — see the immersity-relay README.
+  shared-secret auth — see the relay README there.
 
 ## What is already in this repo
 
